@@ -1,24 +1,23 @@
 <div align="center">
   <img src="peanuts-quiz.png" alt="Quizzer Banner"/>
   
-
   # Quizzer
   
   **CLI App for Quizzes. Gives You the Ability to Create, Edit, share your own quizzes and practice with them using .YAML**
-  [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](#link-to-compiler-support)
-  [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-lightgrey.svg)](#link-to-os)
+  [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
+  [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-lightgrey.svg)](https://www.linux.org/)
   [![Dependency: yaml-cpp](https://img.shields.io/badge/yaml--cpp-0.7.0-orange.svg)](https://github.com/jbeder/yaml-cpp)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#link-to-license)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   <br />
 </div>
 
 ## Table of Contents
-- [Getting Started](#-getting-started)
+- [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Building from Source](#building-from-source)
-- [Usage](#-usage)
-  - [Question Formatting](#-question-formatting)
-- [Troubleshooting](#-troubleshooting)
+- [Usage](#usage)
+  - [Question Formatting](#question-formatting)
+- [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -28,7 +27,7 @@
 
 To build Quizzer on Linux, you will need:
 - A **C++17** compatible toolchain ([GCC](https://gcc.gnu.org/) or [Clang](https://clang.llvm.org/))
-- [**CMake**](https://cmake.org/) (≥ 3.12)
+- [**CMake**](https://cmake.org/) (>= 3.12)
 - [**yaml-cpp**](https://github.com/jbeder/yaml-cpp) (Development package)
 
 > Remark: You do not have to strictly maintain this versioning, however this is what  I have personally tested on.
@@ -42,7 +41,7 @@ sudo apt-get install -y build-essential cmake libyaml-cpp-dev
 
 **2. Clone and Build**
 ```bash
-git clone https://github.com/YOUR_USERNAME/quizzer.git
+git clone https://github.com/trintlermint/quizzer.git
 cd quizzer
 
 mkdir -p build && cd build
