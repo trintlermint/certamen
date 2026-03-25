@@ -431,7 +431,7 @@ static void list_questions(const std::vector<Question>& questions)
         {
             std::cout << "\n%%% Code %%%\n";
             std::cout << *q.code << "\n";
-            std::cout << "%%%%%%\n";
+            std::cout << "%%%%%%%%%%\n";
         }
 
         for (std::size_t j = 0; j < q.choices.size(); ++j)
@@ -463,7 +463,6 @@ static void show_unsaved_changes(
 
     std::cout << "\nUnsaved changes:\n";
 
-    // find removed questions (in original but not in current)
     for (std::size_t i = 0; i < original.size(); ++i)
     {
         bool found = false;
@@ -481,7 +480,6 @@ static void show_unsaved_changes(
         }
     }
 
-    // find added questions (in current but not in original)
     for (std::size_t i = 0; i < current.size(); ++i)
     {
         bool found = false;
@@ -499,7 +497,6 @@ static void show_unsaved_changes(
         }
     }
 
-    // find modified questions (same text, different answer/code/explain/choices)
     for (std::size_t i = 0; i < current.size(); ++i)
     {
         for (std::size_t j = 0; j < original.size(); ++j)
