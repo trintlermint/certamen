@@ -18,6 +18,15 @@ struct Question
     int answer; // 0-based index into 'choices'.
     std::optional<std::string> code;
     std::optional<std::string> explain;
+
+    bool operator==(const Question& other) const
+    {
+        return question == other.question
+            && choices  == other.choices
+            && answer   == other.answer
+            && code     == other.code
+            && explain  == other.explain;
+    }
 };
 
 static std::optional<std::string> validate_question(const Question& q)
@@ -442,6 +451,86 @@ static void list_questions(const std::vector<Question>& questions)
     }
 }
 
+static void show_unsaved_changes(
+    const std::vector<Question>& original,
+    const std::vector<Question>& current)
+{
+    if (original == current)
+    {
+        std::cout << "\nNo unsaved changes.\n";
+        return;
+    }
+
+    std::cout << "\nUnsaved changes:\n";
+
+    // find removed questions (in original but not in current)
+    for (std::size_t i = 0; i < original.size(); ++i)
+    {
+        bool found = false;
+        for (std::size_t j = 0; j < current.size(); ++j)
+        {
+            if (current[j].question == original[i].question)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            std::cout << "  [-] Removed: " << original[i].question << "\n";
+        }
+    }
+
+    // find added questions (in current but not in original)
+    for (std::size_t i = 0; i < current.size(); ++i)
+    {
+        bool found = false;
+        for (std::size_t j = 0; j < original.size(); ++j)
+        {
+            if (original[j].question == current[i].question)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            std::cout << "  [+] Added: " << current[i].question << "\n";
+        }
+    }
+
+    // find modified questions (same text, different answer/code/explain/choices)
+    for (std::size_t i = 0; i < current.size(); ++i)
+    {
+        for (std::size_t j = 0; j < original.size(); ++j)
+        {
+            if (current[i].question != original[j].question) continue;
+
+            if (current[i].answer != original[j].answer)
+            {
+                std::cout << "  [~] Answer changed: " << current[i].question << "\n";
+                std::cout << "       was: " << (original[j].answer + 1)
+                          << ". " << original[j].choices[original[j].answer] << "\n";
+                std::cout << "       now: " << (current[i].answer + 1)
+                          << ". " << current[i].choices[current[i].answer] << "\n";
+            }
+            if (current[i].choices != original[j].choices)
+            {
+                std::cout << "  [~] Choices changed: " << current[i].question << "\n";
+            }
+            if (current[i].code != original[j].code)
+            {
+                std::cout << "  [~] Code changed: " << current[i].question << "\n";
+            }
+            if (current[i].explain != original[j].explain)
+            {
+                std::cout << "  [~] Explanation changed: " << current[i].question << "\n";
+            }
+            break;
+        }
+    }
+}
+
 static int menu_choice(bool randomise)
 {
     std::cout << "\nQuizzer (Randomise: " << (randomise ? "ON" : "OFF") << ")\n"
@@ -473,6 +562,7 @@ int main(int argc, char* argv[])
             std::cout << "Warning: " << e.what() << "\nStarting with an empty quiz.\n";
         }
 
+        const std::vector<Question> saved_questions = questions;
         bool randomise = false;
 
         while (true)
@@ -509,7 +599,8 @@ int main(int argc, char* argv[])
                     }
                     return 0;
                 case 7:
-                    if (read_yes_no("Discard all unsaved changes?"))
+                    show_unsaved_changes(saved_questions, questions);
+                    if (read_yes_no("Discard these changes and exit?"))
                     {
                         std::cout << "Exiting without saving.\n";
                         return 0;

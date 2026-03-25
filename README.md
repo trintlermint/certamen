@@ -4,6 +4,7 @@
   # Quizzer
   
   **CLI App for Quizzes. Gives You the Ability to Create, Edit, share your own quizzes and practice with them using .YAML**
+  
   [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
   [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-lightgrey.svg)](https://www.linux.org/)
   [![Dependency: yaml-cpp](https://img.shields.io/badge/yaml--cpp-0.7.0-orange.svg)](https://github.com/jbeder/yaml-cpp)
