@@ -41,6 +41,7 @@ std::vector<Question> load_questions(const std::string& filename)
         const auto a_node    = item["answer"];
         const auto code_node = item["code"];
         const auto e_node    = item["explain"];
+        const auto lang_node = item["language"];
 
         if (!q_node || !c_node || !a_node)
         {
@@ -65,6 +66,7 @@ std::vector<Question> load_questions(const std::string& filename)
         q.answer = a_node.as<int>();
         if (code_node) q.code = code_node.as<std::string>();
         if (e_node)    q.explain = e_node.as<std::string>();
+        if (lang_node) q.language = lang_node.as<std::string>();
 
         if (auto err = validate_question(q))
         {
@@ -91,6 +93,10 @@ void save_questions(const std::vector<Question>& questions, const std::string& f
         if (q.explain && !q.explain->empty())
         {
             out << YAML::Key << "explain" << YAML::Value << YAML::Literal << *q.explain;
+        }
+        if (q.language && !q.language->empty())
+        {
+            out << YAML::Key << "language" << YAML::Value << *q.language;
         }
         out << YAML::Key << "choices" << YAML::Value << YAML::BeginSeq;
         for (const auto& c : q.choices)
