@@ -384,7 +384,7 @@ static void change_answer(std::vector<Question>& questions)
         return;
     }
 
-    std::cout << "\nChange Answer\n";
+    std::cout << "\nChange Answer for which question?\n";
     for (std::size_t i = 0; i < questions.size(); ++i)
     {
         std::cout << (i + 1) << ". " << questions[i].question << "\n";
