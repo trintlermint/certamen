@@ -1,7 +1,8 @@
 <div align="center">
   
   # CERTAMEN
-
+   <img src="https://github.com/trintlermint/certamen/assets/certamen-demo.mp4" alt="Demo image"></img>
+  
   A *Terminal User Interface* **Quiz Game Engine** written entirely in C++ using these [dependencies](#dependencies).
 
   Made with love by [trintlermint](#credits).
