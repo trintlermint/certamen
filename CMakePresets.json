@@ -1,5 +1,10 @@
 {
   "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 14,
+    "patch": 0
+  },
   "vendor": {
     "certamen": {}
   },
@@ -10,7 +15,8 @@
       "description": "Default configuration",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_CXX_STANDARD": "17"
+        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON"
       }
     },
     {
@@ -42,6 +48,15 @@
       "configurePreset": "debug",
       "description": "Build in debug mode",
       "jobs": 0
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "default",
+      "configurePreset": "debug",
+      "output": {
+        "outputOnFailure": true
+      }
     }
   ]
 }
