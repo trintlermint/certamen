@@ -2,12 +2,17 @@
   
   # Certamen
 
-  A *Terminal User Interface* **Quiz Game Engine** written entirely in C++ using [Dependencies](#dependencies) with Love by [trintlermint](#credits).
-  Author *Quizzes* and seamlessly test yourself or others in a full-screen TUI; host them over SSH for you and your friends to play! (this way, you get to make fun of their... haskell knowledge for example!)
+  A *Terminal User Interface* **Quiz Game Engine** written entirely in C++ using these [dependencies](#dependencies).
+  Made with love by [trintlermint](#credits).
+  
+  ## Author *Quizzes* and seamlessly "test" yourself in a full-screen TUI; host the game over SSH for you and your friends to play!
+  > This way, you get to make fun of their... incredibly (lacking) haskell knowledge for example!
 
   [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
+  ### One might ask: I'm passing everything, why do I need this?
+  
   ## Charlie Brown aces his tests with this!
   
   <img src="peanuts-quiz.png" alt="certamen-banner"/>
@@ -205,6 +210,8 @@ Quizzes are YAML files. Each question is a map in a top-to-down sequence:
 
 ## Troubleshooting
 
+**This project was made rather fast by my standards due to this thing called "Computer Addiction and writing in Helix." Due to these factors, the code is bound to break. I would lovingly accept any Contributions, or even a github issue.**
+*Anyway*,
 <details>
 <summary><b>Missing yaml-cpp headers</b></summary>
 <br/>
