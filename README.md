@@ -3,6 +3,7 @@
   # Certamen
 
   A *Terminal User Interface* **Quiz Game Engine** written entirely in C++ using these [dependencies](#dependencies).
+
   Made with love by [trintlermint](#credits).
   
   ## Author *Quizzes* and seamlessly "test" yourself in a full-screen TUI; host the game over SSH for you and your friends to play!
@@ -15,7 +16,7 @@
   
   ## Charlie Brown aces his tests with this!
   
-  <img src="peanuts-quiz.png" alt="certamen-banner"/>
+  <img src="./assets/peanuts-quiz.png" alt="certamen-banner"/>
   <br />
 </div>
 
@@ -210,8 +211,10 @@ Quizzes are YAML files. Each question is a map in a top-to-down sequence:
 
 ## Troubleshooting
 
-**This project was made rather fast by my standards due to this thing called "Computer Addiction and writing in Helix." Due to these factors, the code is bound to break. I would lovingly accept any Contributions, or even a github issue.**
+**This project was made rather fast by my standards due to this thing called "Computer Addiction and writing in Helix." Due to these factors, the code is bound to break. I would lovingly accept any Contributions, see [CONTRIBUTING.md](CONTRIBUTING.md), or even a trivial github issue.**
+
 *Anyway*,
+
 <details>
 <summary><b>Missing yaml-cpp headers</b></summary>
 <br/>
@@ -265,6 +268,6 @@ The name **Certamen** is Latin for "contest" so I thought "yeah! this works!" th
 
 ## License
 
-[<img src="./brainmade-org.png" alt="brainmade.org">](https://brainmade.org)
+[<img src="./assets/brainmade-org.png" alt="brainmade.org">](https://brainmade.org)
 MIT; See [LICENSE.md](LICENSE.md).
 Copyright 2026 Niladri Adhikary.
