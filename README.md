@@ -139,15 +139,13 @@ The TUI presents a menu with keyboard (j/k), (up/down/left/right) and number-key
 2. *Add Question*; compose a question with choices, optional code snippet, and explanation
 3. *Remove Question*; delete a question
 4. *Change Answer*; update the correct answer for an existing question
-5. *List Questions*; browse all questions with toggleable answers, code, and explanations
-6. *Save and Exit*; write changes back to the open YAML file.
-7. *Quit without Saving*; write no changes back, quit the program.
+5. *Edit Choice*; update the text contents of a selected question's choice.
+6. *List Questions*; browse all questions with toggleable answers, code, and explanations
+7. *Set Author and Name*; set metadata describing the author/name.
+8. *Save and Exit*; write changes back to the open YAML file.
+9. *Quit without Saving*; write no changes back, quit the program.
 
-> Press `R` on the main menu to toggle randomized question *and* answer order (chore: use /dev/urandom?).
-
-> On quit, Certamen shows a diff of unsaved changes so nothing is lost by accident.
-> I am working on adding "Change Choice" and implementing that inside Change Answer.
-
+> Press `R` on the main menu to toggle randomized question *and* answer order.
 > REMARK: The mouse functionality is WIP.
 
 ### SSH server mode
@@ -175,7 +173,7 @@ Players connect with `ssh -p <port> <name>@<host>` and get the same TUI in an *i
 
 ## Quiz format
 
-Quizzes are YAML files. Each question is a map in a top-to-down sequence:
+Quizzes are YAML files. Each question is a map in a top-to-down sequence which is nested inside `questions`:
 
 ```yaml
 - question: "What is the time complexity of binary search?"
