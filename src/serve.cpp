@@ -230,7 +230,7 @@ static void handle_client(ssh_session session,
                 }
                 else
                 {
-                    log_info("Authentictor  rejected: wrong password from " + client_user);
+                    log_info("Authentication rejected: wrong password from " + client_user);
                     ssh_message_auth_set_methods(msg, SSH_AUTH_METHOD_PASSWORD);
                     ssh_message_reply_default(msg);
                 }

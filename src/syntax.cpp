@@ -89,7 +89,6 @@ static std::string line_comment_prefix(Lang lang)
     }
 }
 
-// Tokenise a line -?> color elements
 static Element highlight_line(const std::string& line, Lang lang,
                               const std::unordered_set<std::string>& kw)
 {
@@ -185,7 +184,6 @@ static Element highlight_line(const std::string& line, Lang lang,
         if (std::isalpha(static_cast<unsigned char>(line[i])) || line[i] == '_' || line[i] == '#')
         {
             std::string word;
-            // include # prefix for preprocessor directives
             if (line[i] == '#')
             {
                 word += '#';
@@ -220,7 +218,7 @@ static Element highlight_line(const std::string& line, Lang lang,
             ++i;
             if (lang == Lang::Haskell)
             {
-                // askell ops can be multi-char
+                // Haskell ops can be multi-char
                 while (i < len && !std::isalnum(static_cast<unsigned char>(line[i])) &&
                        !std::isspace(static_cast<unsigned char>(line[i])) &&
                        line[i] != '"' && line[i] != '\'' &&
