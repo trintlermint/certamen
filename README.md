@@ -7,16 +7,20 @@
   <img src="assets/3.png" width="32%" alt="Demo 3">
   </p>
   
-  A *Terminal User Interface* **Quiz Game Engine** written entirely in C++ using these [dependencies](#dependencies).
+  A *Terminal User Interface* **Quiz Game Engine** written entirely in C++.
 
   Made with love by [trintlermint](#credits).
   
   ## Author *Quizzes* and seamlessly "test" yourself in a full-screen TUI; host the game over SSH for you and your friends to play!
   > This way, you get to make fun of their... incredibly (lacking) haskell knowledge for example!
-
-  [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
-
+  ### Releases
+  [![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=linux%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
+  [![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=macOS%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
+  [![Windows CI](https://img.shields.io/badge/windows-CI%20failing%20(incompatible)-red)](https://github.com/trintlermint/certamen/actions)
+  ### Notes
+  [![Dependencies](https://img.shields.io/badge/dependencies-FTXUI%20%7C%20yaml--cpp%20%7C%20libssh-informational)](#credits)
+  [![SSH Compatible](https://img.shields.io/badge/SSH-compatible-brightgreen)](#ssh-server-mode)
+  [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   ### One might ask: I'm passing everything, why do I need this?
   
   ## Charlie Brown aces his tests with this!
@@ -30,10 +34,10 @@
 - [Building](#building)
   - [Dependencies](#dependencies)
   - [CMake (recommended)](#cmake-recommended)
-  - [Manual compilation](#manual-compilation)
+  - [Manual compilation](#manual-compilation-cli)
   - [macOS and Windows](#macos-and-windows)
 - [Usage](#usage)
-  - [Local mode](#local-mode)
+  - [Offline user mode](#offline-user-mode)
   - [SSH server mode](#ssh-server-mode)
 - [Quiz format](#quiz-format)
 - [Troubleshooting](#troubleshooting)
@@ -43,6 +47,9 @@
 ---
 
 ## Building
+
+### Releases
+I have now setup Github Releases through Actions, if you want to skip the headache of building the program, feel free to head over to [**releases**](https://github.com/trintlermint/certamen/releases/latest).
 
 ### Dependencies
 
@@ -125,8 +132,6 @@ cmake --build --preset release
 ```
 
 > REMARK: I am NOT a macOS OR Windows user; Manuals told me this should work, if it does or doesn't please inform me on Github Issues! See [CONTRIBUTING.md](CONTRIBUTING.md)
-
-> See [RELEASES.md](RELEASES.md) for CI-driven cross-platform builds via GitHub Actions. (tbd)
 
 ---
 
