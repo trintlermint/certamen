@@ -1,6 +1,6 @@
 <div align="center">
   
-  # Certamen
+  # CERTAMEN
 
   A *Terminal User Interface* **Quiz Game Engine** written entirely in C++ using these [dependencies](#dependencies).
 
