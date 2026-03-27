@@ -30,7 +30,7 @@ compile_commands.json
 *.exe
 *.out
 *.app
-quizzer
+certamen
 
 # local quiz databases / test files
 quiz.yaml
