@@ -16,6 +16,7 @@
   > This way, you get to make fun of their... incredibly (lacking) *haskell* knowledge for example!
 
   ### Releases
+  [![AUR version](https://img.shields.io/aur/version/certamen)](https://aur.archlinux.org/packages/certamen)
   [![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=linux%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
   [![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=macOS%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
   [![Windows CI](https://img.shields.io/badge/windows-CI%20failing%20(incompatible)-red)](https://github.com/trintlermint/certamen/actions)
@@ -34,6 +35,8 @@
 ## Table of Contents
 
 - [Building](#building)
+  - [Releases](#releases)
+    - [AUR](#aur)
   - [Dependencies](#dependencies)
   - [CMake](#cmake)
   - [Manual compilation](#manual-compilation-cli)
@@ -52,6 +55,14 @@
 
 ### Releases
 I have now setup Github Releases through Actions, if you want to skip the headache of building the program, feel free to head over to [**releases**](https://github.com/trintlermint/certamen/releases/latest).
+
+#### AUR
+To download **Certamen** from the ArchLinux User Repository, do the following:
+
+```bash
+pacman -S certamen
+```
+> Or any equivalent command using your AUR package helper.
 
 ### Dependencies
 
