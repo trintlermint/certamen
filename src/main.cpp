@@ -44,10 +44,15 @@ static int run_local(const std::vector<std::string>& files)
 {
     AppState state;
 
-    if (!files.empty())
-        state.load_file(files[0]);
-    else
+    for (const auto& f : files)
+        state.load_file(f);
+
+    if (files.empty())
         state.status_message = "No file loaded. Use 'Load Quiz File' to open a quiz.";
+    else if (files.size() > 1)
+        state.status_message = "Loaded " + std::to_string(files.size()) +
+                               " files (" + std::to_string(state.questions.size()) +
+                               " questions total).";
 
     auto screen = ScreenInteractive::Fullscreen();
 
