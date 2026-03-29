@@ -25,6 +25,23 @@ ftxui::Component make_quiz_screen(AppState& state)
 
     auto component = CatchEvent(focusable, [&](Event event) {
         if (state.quiz_session.empty()) return false;
+
+        if (state.quiz_quit_pending)
+        {
+            if (event == Event::Return || event == Event::Character('y'))
+            {
+                state.quiz_quit_pending = false;
+                state.return_to_menu();
+                return true;
+            }
+            if (event == Event::Escape || event == Event::Character('n'))
+            {
+                state.quiz_quit_pending = false;
+                return true;
+            }
+            return true;
+        }
+
         int idx = state.quiz_index;
         if (idx >= static_cast<int>(state.quiz_session.size())) return false;
 
@@ -59,7 +76,7 @@ ftxui::Component make_quiz_screen(AppState& state)
 
         if (event == Event::Escape || event == Event::Character('q'))
         {
-            state.return_to_menu();
+            state.quiz_quit_pending = true;
             return true;
         }
 
@@ -67,6 +84,22 @@ ftxui::Component make_quiz_screen(AppState& state)
     });
 
     return Renderer(component, [&] {
+        if (state.quiz_quit_pending)
+        {
+            return vbox({
+                text(""),
+                text(" Quit Quiz? ") | bold | center,
+                text(""),
+                separator() | color(Color::GrayDark),
+                text(""),
+                text(" All progress will be lost.") | dim | center,
+                text(""),
+                filler(),
+                separator() | color(Color::GrayDark),
+                text(" y/Enter quit  n/Esc cancel ") | dim | center,
+            }) | borderRounded;
+        }
+
         if (state.quiz_session.empty())
             return text(" No questions present. ") | center | borderRounded;
 

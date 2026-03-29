@@ -30,28 +30,41 @@ ftxui::Component make_quit_confirm_screen(AppState& state, ftxui::ScreenInteract
     });
 
     return Renderer(container, [&, quit_btn, cancel_btn] {
-        auto diff_entries = render_diff_lines(state.diff_lines);
+        bool has_changes = state.has_unsaved_changes();
 
-        return vbox({
-            text(""),
-            text(" Quit without Saving ") | bold | center,
-            text(""),
-            separator() | color(Color::GrayDark),
-            text(""),
-            text(" These changes will be lost:") | dim,
-            text(""),
-            vbox(std::move(diff_entries)) | vscroll_indicator | frame | flex,
-            text(""),
-            separator() | color(Color::GrayDark),
-            text(""),
-            hbox({
-                filler(),
-                quit_btn->Render() | color(Color::RedLight),
-                text("    "),
-                cancel_btn->Render(),
-                filler(),
-            }),
-            text(""),
-        }) | borderRounded;
+        Elements body;
+        body.push_back(text(""));
+
+        if (has_changes)
+        {
+            body.push_back(text(" Quit without Saving ") | bold | center);
+            body.push_back(text(""));
+            body.push_back(separator() | color(Color::GrayDark));
+            body.push_back(text(""));
+            body.push_back(text(" These changes will be lost:") | dim);
+            body.push_back(text(""));
+            auto diff_entries = render_diff_lines(state.diff_lines);
+            body.push_back(vbox(std::move(diff_entries)) | vscroll_indicator | frame | flex);
+        }
+        else
+        {
+            body.push_back(text(" Quit? ") | bold | center);
+            body.push_back(text(""));
+            body.push_back(filler());
+        }
+
+        body.push_back(text(""));
+        body.push_back(separator() | color(Color::GrayDark));
+        body.push_back(text(""));
+        body.push_back(hbox({
+            filler(),
+            quit_btn->Render() | color(Color::RedLight),
+            text("    "),
+            cancel_btn->Render(),
+            filler(),
+        }));
+        body.push_back(text(""));
+
+        return vbox(std::move(body)) | borderRounded;
     });
 }
