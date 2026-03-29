@@ -69,6 +69,7 @@ ftxui::Component make_add_question_screen(AppState& state)
             return;
         }
 
+        q.source_file = state.target_file;
         state.questions.push_back(std::move(q));
         state.status_message = "Question added.";
         state.current_screen = AppScreen::MENU;

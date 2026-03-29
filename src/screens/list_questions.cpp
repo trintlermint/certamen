@@ -19,7 +19,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
     auto component = Container::Vertical({controls});
 
     component |= CatchEvent([&](Event event) {
-        int count = static_cast<int>(state.questions.size());
+        int count = static_cast<int>(state.target_indices.size());
         if (nav_up_down(event, state.list_selected, count)) return true;
         if (event == Event::Character('b') || event == Event::Escape)
         {
@@ -31,17 +31,18 @@ ftxui::Component make_list_questions_screen(AppState& state)
 
     return Renderer(component, [&, answer_toggle, code_toggle, explain_toggle] {
         Elements list_entries;
-        for (std::size_t i = 0; i < state.questions.size(); ++i)
+        for (int i = 0; i < static_cast<int>(state.target_indices.size()); ++i)
         {
-            bool selected = (static_cast<int>(i) == state.list_selected);
+            bool selected = (i == state.list_selected);
+            const auto& q = state.questions[state.target_indices[i]];
             auto entry = hbox({
                 text(selected ? " > " : "   "),
                 text(std::to_string(i + 1) + ". ") | dim,
-                text(state.questions[i].question) | (selected ? bold : nothing),
-                state.questions[i].code
+                text(q.question) | (selected ? bold : nothing),
+                q.code
                     ? text(" [code]") | color(Color::Cyan) | dim
                     : text(""),
-                state.questions[i].explain
+                q.explain
                     ? text(" [exp]") | color(Color::Yellow) | dim
                     : text(""),
             });
@@ -54,9 +55,9 @@ ftxui::Component make_list_questions_screen(AppState& state)
 
         Elements detail;
         if (state.list_selected >= 0 &&
-            state.list_selected < static_cast<int>(state.questions.size()))
+            state.list_selected < static_cast<int>(state.target_indices.size()))
         {
-            const auto& q = state.questions[state.list_selected];
+            const auto& q = state.questions[state.target_indices[state.list_selected]];
 
             detail.push_back(paragraph(q.question) | bold);
 

@@ -11,29 +11,31 @@ using namespace ftxui;
 ftxui::Component make_change_answer_screen(AppState& state)
 {
     auto component = CatchEvent(Renderer([](bool) { return text(""); }), [&](Event event) {
-        if (state.questions.empty()) return false;
+        if (state.target_indices.empty()) return false;
 
         if (state.change_answer_phase == 0)
         {
-            int count = static_cast<int>(state.questions.size());
+            int count = static_cast<int>(state.target_indices.size());
             if (nav_up_down(event, state.select_question_idx, count)) return true;
             if (nav_numeric(event, state.select_question_idx, count)) return true;
             if (event == Event::Return)
             {
+                int real_idx = state.target_indices[state.select_question_idx];
                 state.change_answer_phase = 1;
-                state.select_new_answer = state.questions[state.select_question_idx].answer;
+                state.select_new_answer = state.questions[real_idx].answer;
                 return true;
             }
         }
         else
         {
-            const auto& q = state.questions[state.select_question_idx];
+            int real_idx = state.target_indices[state.select_question_idx];
+            const auto& q = state.questions[real_idx];
             int num_choices = static_cast<int>(q.choices.size());
             if (nav_up_down(event, state.select_new_answer, num_choices)) return true;
             if (nav_numeric(event, state.select_new_answer, num_choices)) return true;
             if (event == Event::Return)
             {
-                state.questions[state.select_question_idx].answer = state.select_new_answer;
+                state.questions[real_idx].answer = state.select_new_answer;
                 state.status_message = "Answer updated.";
                 state.change_answer_phase = 0;
                 return true;
@@ -53,8 +55,8 @@ ftxui::Component make_change_answer_screen(AppState& state)
     });
 
     return Renderer(component, [&] {
-        if (state.questions.empty())
-            return text(" No questions. ") | center | borderRounded;
+        if (state.target_indices.empty())
+            return text(" No questions for this file. ") | center | borderRounded;
 
         Elements body;
 
@@ -66,10 +68,10 @@ ftxui::Component make_change_answer_screen(AppState& state)
             body.push_back(separator() | color(Color::GrayDark));
             body.push_back(text(""));
 
-            for (int i = 0; i < static_cast<int>(state.questions.size()); ++i)
+            for (int i = 0; i < static_cast<int>(state.target_indices.size()); ++i)
             {
                 bool sel = (i == state.select_question_idx);
-                const auto& q = state.questions[i];
+                const auto& q = state.questions[state.target_indices[i]];
                 std::string answer_hint = "  [" +
                     std::to_string(q.answer + 1) + ": " +
                     q.choices[q.answer] + "]";
@@ -89,7 +91,8 @@ ftxui::Component make_change_answer_screen(AppState& state)
         }
         else
         {
-            const auto& q = state.questions[state.select_question_idx];
+            int real_idx = state.target_indices[state.select_question_idx];
+            const auto& q = state.questions[real_idx];
 
             body.push_back(text(""));
             body.push_back(text(" Change Answer ") | bold | center);

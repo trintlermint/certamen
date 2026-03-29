@@ -132,6 +132,7 @@ ftxui::Component make_menu_screen(AppState& state)
                     return true;
                 case 8:
                     state.load_path_text.clear();
+                    state.load_screen_mode = 1;
                     state.current_screen = AppScreen::LOAD_QUIZ;
                     return true;
             }

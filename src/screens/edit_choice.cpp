@@ -18,7 +18,8 @@ ftxui::Component make_edit_choice_screen(AppState& state)
             state.status_message = "Choice text cannot be empty.";
             return;
         }
-        auto& q = state.questions[state.edit_choice_question_idx];
+        int real_idx = state.target_indices[state.edit_choice_question_idx];
+        auto& q = state.questions[real_idx];
         q.choices[state.edit_choice_choice_idx] = state.edit_choice_text;
         state.status_message = "Choice updated.";
         state.edit_choice_phase = 1;
@@ -35,7 +36,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
     auto inner = Container::Vertical({});
 
     auto component = CatchEvent(inner, [&](Event event) {
-        if (state.questions.empty()) return false;
+        if (state.target_indices.empty()) return false;
         if (state.edit_choice_phase == 2)
         {
             if (event == Event::Escape)
@@ -48,7 +49,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
 
         if (state.edit_choice_phase == 0)
         {
-            int count = static_cast<int>(state.questions.size());
+            int count = static_cast<int>(state.target_indices.size());
             if (nav_up_down(event, state.edit_choice_question_idx, count)) return true;
             if (nav_numeric(event, state.edit_choice_question_idx, count)) return true;
             if (event == Event::Return)
@@ -60,7 +61,8 @@ ftxui::Component make_edit_choice_screen(AppState& state)
         }
         else if (state.edit_choice_phase == 1)
         {
-            const auto& q = state.questions[state.edit_choice_question_idx];
+            int real_idx = state.target_indices[state.edit_choice_question_idx];
+            const auto& q = state.questions[real_idx];
             int num_choices = static_cast<int>(q.choices.size());
             if (nav_up_down(event, state.edit_choice_choice_idx, num_choices)) return true;
             if (nav_numeric(event, state.edit_choice_choice_idx, num_choices)) return true;
@@ -92,8 +94,8 @@ ftxui::Component make_edit_choice_screen(AppState& state)
         else
             inner->Add(focusable);
 
-        if (state.questions.empty())
-            return text(" No questions. ") | center | borderRounded;
+        if (state.target_indices.empty())
+            return text(" No questions for this file. ") | center | borderRounded;
 
         Elements body;
 
@@ -105,13 +107,14 @@ ftxui::Component make_edit_choice_screen(AppState& state)
             body.push_back(separator() | color(Color::GrayDark));
             body.push_back(text(""));
 
-            for (int i = 0; i < static_cast<int>(state.questions.size()); ++i)
+            for (int i = 0; i < static_cast<int>(state.target_indices.size()); ++i)
             {
                 bool sel = (i == state.edit_choice_question_idx);
+                const auto& q = state.questions[state.target_indices[i]];
                 auto entry = hbox({
                     text(sel ? " > " : "   "),
                     text(std::to_string(i + 1) + ". ") | dim,
-                    text(state.questions[i].question) | (sel ? bold : nothing),
+                    text(q.question) | (sel ? bold : nothing),
                 });
                 if (sel) entry = entry | color(Color::Cyan);
                 body.push_back(entry);
@@ -123,7 +126,8 @@ ftxui::Component make_edit_choice_screen(AppState& state)
         }
         else if (state.edit_choice_phase == 1)
         {
-            const auto& q = state.questions[state.edit_choice_question_idx];
+            int real_idx = state.target_indices[state.edit_choice_question_idx];
+            const auto& q = state.questions[real_idx];
 
             body.push_back(text(""));
             body.push_back(text(" Edit Choice ") | bold | center);
@@ -161,7 +165,8 @@ ftxui::Component make_edit_choice_screen(AppState& state)
         }
         else
         {
-            const auto& q = state.questions[state.edit_choice_question_idx];
+            int real_idx = state.target_indices[state.edit_choice_question_idx];
+            const auto& q = state.questions[real_idx];
 
             body.push_back(text(""));
             body.push_back(text(" Edit Choice ") | bold | center);
