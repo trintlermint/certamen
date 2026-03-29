@@ -12,8 +12,23 @@ ftxui::Component make_set_metadata_screen(AppState& state)
     auto author_input = Input(&state.meta_author_text, "Author...");
 
     auto save_btn = Button(" Save ", [&] {
-        state.quiz_name   = state.meta_name_text;
-        state.quiz_author = state.meta_author_text;
+        int tf = state.target_file;
+        if (tf >= 0 && tf < static_cast<int>(state.loaded_files.size()))
+        {
+            auto& lf = state.loaded_files[tf];
+            lf.name   = state.meta_name_text;
+            lf.author = state.meta_author_text;
+            if (tf == 0)
+            {
+                state.quiz_name   = state.meta_name_text;
+                state.quiz_author = state.meta_author_text;
+            }
+        }
+        else
+        {
+            state.quiz_name   = state.meta_name_text;
+            state.quiz_author = state.meta_author_text;
+        }
         state.status_message = "Metadata updated.";
         state.current_screen = AppScreen::MENU;
     }, ButtonOption::Simple());
