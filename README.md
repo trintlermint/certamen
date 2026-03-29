@@ -60,7 +60,7 @@ I have now setup Github Releases through Actions, if you want to skip the headac
 To download **Certamen** from the ArchLinux User Repository, do the following:
 
 ```bash
-pacman -S certamen
+sudo pacman -S certamen
 ```
 > Or any equivalent command using your AUR package helper.
 
