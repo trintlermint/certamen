@@ -118,10 +118,9 @@ static std::pair<int,int> run_quiz(const std::string& quiz_file,
                                    ScreenInteractive& screen)
 {
     AppState state;
-    state.filename = quiz_file;
     try
     {
-        auto quiz = load_quiz(state.filename);
+        auto quiz = load_quiz(quiz_file);
         state.questions   = std::move(quiz.questions);
         state.quiz_name   = std::move(quiz.name);
         state.quiz_author = std::move(quiz.author);
@@ -131,7 +130,6 @@ static std::pair<int,int> run_quiz(const std::string& quiz_file,
         std::cerr << "Error loading " << quiz_file << ": " << e.what() << "\n";
         return {0, 0};
     }
-    state.saved_questions = state.questions;
     state.start_quiz();
 
     auto quiz_screen = make_quiz_screen(state);

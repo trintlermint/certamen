@@ -13,6 +13,7 @@ struct Question
     std::optional<std::string> code;
     std::optional<std::string> explain;
     std::optional<std::string> language; // code highlight language (e.g. "java", "haskell")
+    int source_file = -1; // -1 = unassigned
 
     bool operator==(const Question& other) const
     {

@@ -13,6 +13,8 @@
 #include "screens/save_confirm.hpp"
 #include "screens/quit_confirm.hpp"
 #include "screens/load_quiz.hpp"
+#include "screens/quiz_setup.hpp"
+#include "screens/pick_file.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
@@ -68,6 +70,8 @@ static int run_local(const std::vector<std::string>& files)
     auto save_confirm_screen    = make_save_confirm_screen(state);
     auto quit_confirm_screen    = make_quit_confirm_screen(state, screen);
     auto load_quiz_screen       = make_load_quiz_screen(state);
+    auto quiz_setup_screen      = make_quiz_setup_screen(state);
+    auto pick_file_screen       = make_pick_file_screen(state);
 
     int screen_index = 0;
     Components screens = {
@@ -83,6 +87,8 @@ static int run_local(const std::vector<std::string>& files)
         save_confirm_screen,
         quit_confirm_screen,
         load_quiz_screen,
+        quiz_setup_screen,
+        pick_file_screen,
     };
     auto tab = Container::Tab(std::move(screens), &screen_index);
 
@@ -103,13 +109,8 @@ static int run_local(const std::vector<std::string>& files)
             }
             if (event == Event::Character('q'))
             {
-                if (state.has_unsaved_changes())
-                {
-                    state.compute_diff();
-                    state.current_screen = AppScreen::QUIT_CONFIRM;
-                }
-                else
-                    screen.Exit();
+                state.compute_diff();
+                state.current_screen = AppScreen::QUIT_CONFIRM;
                 return true;
             }
         }
