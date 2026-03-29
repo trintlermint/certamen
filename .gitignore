@@ -55,3 +55,4 @@ Thumbs.db
 # Program generated files
 certamen_host_rsa
 *.yaml
+/.direnv
