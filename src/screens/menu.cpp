@@ -95,7 +95,7 @@ ftxui::Component make_menu_screen(AppState& state)
                     state.current_screen = AppScreen::SET_METADATA;
                     return true;
                 case 7:
-                    if (!state.file_loaded)
+                    if (state.loaded_files.empty())
                     {
                         state.status_message = "No file loaded to save.";
                         return true;
@@ -128,8 +128,14 @@ ftxui::Component make_menu_screen(AppState& state)
         info_parts.push_back(text("  ") | dim);
         info_parts.push_back(separator());
         info_parts.push_back(text("  ") | dim);
-        if (state.file_loaded)
-            info_parts.push_back(text(state.filename) | dim);
+        if (!state.loaded_files.empty())
+        {
+            int file_count = static_cast<int>(state.loaded_files.size());
+            if (file_count == 1)
+                info_parts.push_back(text(state.loaded_files[0].filename) | dim);
+            else
+                info_parts.push_back(text(std::to_string(file_count) + " files loaded") | dim);
+        }
         else
             info_parts.push_back(text("no file loaded") | color(Color::RedLight) | dim);
         info_parts.push_back(filler());

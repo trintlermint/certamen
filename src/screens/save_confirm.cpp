@@ -12,7 +12,7 @@ ftxui::Component make_save_confirm_screen(AppState& state)
     auto save_btn = Button(" Save ", [&] {
         try
         {
-            state.save_current_file();
+            state.save_all_files();
             state.current_screen = AppScreen::MENU;
         }
         catch (const std::exception& e)
