@@ -41,21 +41,33 @@ ftxui::Component make_menu_screen(AppState& state)
             {
                 case 0:
                     if (state.questions.empty())
+                    {
                         state.status_message = "No questions loaded.";
-                    else
+                    }
+                    else if (state.loaded_files.size() <= 1)
+                    {
                         state.start_quiz();
+                    }
+                    else
+                    {
+                        state.quiz_setup_phase = 0;
+                        state.quiz_setup_cursor = 0;
+                        state.quiz_file_included.assign(state.loaded_files.size(), true);
+                        state.quiz_file_order.clear();
+                        state.current_screen = AppScreen::QUIZ_SETUP;
+                    }
                     return true;
                 case 1:
                     state.reset_add_form();
-                    state.current_screen = AppScreen::ADD_QUESTION;
+                    state.current_screen = state.route_to(AppScreen::ADD_QUESTION);
                     return true;
                 case 2:
                     if (state.questions.empty())
                         state.status_message = "No questions to remove.";
                     else
                     {
-                        state.select_question_idx = 0;
-                        state.current_screen = AppScreen::REMOVE_QUESTION;
+                        state.remove_question_idx = 0;
+                        state.current_screen = state.route_to(AppScreen::REMOVE_QUESTION);
                     }
                     return true;
                 case 3:
@@ -66,7 +78,7 @@ ftxui::Component make_menu_screen(AppState& state)
                         state.select_question_idx = 0;
                         state.select_new_answer = 0;
                         state.change_answer_phase = 0;
-                        state.current_screen = AppScreen::CHANGE_ANSWER;
+                        state.current_screen = state.route_to(AppScreen::CHANGE_ANSWER);
                     }
                     return true;
                 case 4:
@@ -77,7 +89,7 @@ ftxui::Component make_menu_screen(AppState& state)
                         state.edit_choice_question_idx = 0;
                         state.edit_choice_choice_idx = 0;
                         state.edit_choice_phase = 0;
-                        state.current_screen = AppScreen::EDIT_CHOICE;
+                        state.current_screen = state.route_to(AppScreen::EDIT_CHOICE);
                     }
                     return true;
                 case 5:
@@ -86,22 +98,37 @@ ftxui::Component make_menu_screen(AppState& state)
                     else
                     {
                         state.list_selected = 0;
-                        state.current_screen = AppScreen::LIST_QUESTIONS;
+                        state.current_screen = state.route_to(AppScreen::LIST_QUESTIONS);
                     }
                     return true;
                 case 6:
-                    state.meta_name_text = state.quiz_name;
-                    state.meta_author_text = state.quiz_author;
-                    state.current_screen = AppScreen::SET_METADATA;
+                {
+                    state.current_screen = state.route_to(AppScreen::SET_METADATA);
+                    if (state.current_screen == AppScreen::SET_METADATA)
+                    {
+                        if (state.target_file >= 0 && state.target_file < static_cast<int>(state.loaded_files.size()))
+                        {
+                            auto& lf = state.loaded_files[state.target_file];
+                            state.meta_name_text = lf.name;
+                            state.meta_author_text = lf.author;
+                        }
+                        else
+                        {
+                            state.meta_name_text = state.quiz_name;
+                            state.meta_author_text = state.quiz_author;
+                        }
+                    }
                     return true;
+                }
                 case 7:
                     if (state.loaded_files.empty())
                     {
                         state.status_message = "No file loaded to save.";
                         return true;
                     }
-                    state.compute_diff();
-                    state.current_screen = AppScreen::SAVE_CONFIRM;
+                    state.current_screen = state.route_to(AppScreen::SAVE_CONFIRM);
+                    if (state.current_screen == AppScreen::SAVE_CONFIRM)
+                        state.compute_diff(state.target_file);
                     return true;
                 case 8:
                     state.load_path_text.clear();
