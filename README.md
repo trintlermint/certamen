@@ -37,10 +37,11 @@
 - [Building](#building)
   - [Releases](#releases)
     - [AUR](#aur)
+    - [Nix](nix-cli)
   - [Dependencies](#dependencies)
   - [CMake](#cmake)
-  - [Manual compilation](#manual-compilation-cli)
   - [macOS and Windows](#macos-and-windows)
+  - [Manual compilation](#manual-compilation-cli)
 - [Usage](#usage)
   - [Offline user mode](#offline-user-mode)
   - [SSH server mode](#ssh-server-mode)
@@ -63,6 +64,16 @@ To download **Certamen** from the ArchLinux User Repository, do the following:
 sudo pacman -S certamen
 ```
 > Or any equivalent command using your AUR package helper.
+
+#### Nix (CLI)
+To download **Certamen** as a Nix package, do the following:
+
+```bash
+... to come by @valyntyler.
+```
+
+> [!WARNING]
+> To be clear, the Nix package supports the earlier CLI version named `quizzer`, if you want to get the updated TUI, please compile from source, OR help contribute! See [CONTRIBUTING](CONTRIBUTING.md).
 
 ### Dependencies
 
@@ -96,7 +107,7 @@ sudo dnf install gcc-c++ cmake yaml-cpp-devel libssh-devel
 sudo pacman -S base-devel cmake yaml-cpp libssh
 ```
 
-> Or any other equivalent function to install these packages on your machine.
+> Or any other equivalent function to install these packages on your UNIX machine.
 
 Next, clone and build:
 
@@ -114,17 +125,6 @@ The binary compiles into an executable, stored at `build/bin/certamen`. Run:
 ```
 
 Without arguments it looks for `./quiz.yaml` in the current working directory being run from.
-
-### Manual compilation (CLI)
-
-If yaml-cpp are installed system-wide and you want to skip CMake entirely, you can compile the CLI, the CLI is the previously, originally known "quizzer" app; faithfully renamed.
-
-```bash
-g++ -std=c++17 -Wall -Wextra -Wpedantic -O2 main.cpp -lyaml-cpp -o certamen
-```
-> [!NOTE]
-> 
-> This builds a local-only binary without the TUI or SSH server. Use the CMake build for the included features.
 
 ### macOS and Windows
 
@@ -146,6 +146,16 @@ cmake --build --preset release
 > [!WARNING]
 >
 > I am NOT a macOS OR Windows user; Manuals told me this should work, if it does or doesn't please inform me on Github Issues! See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+### Manual compilation (CLI)
+
+If yaml-cpp are installed system-wide and you want to skip CMake entirely, you can compile the CLI, the CLI is the previously, originally known "quizzer" app; faithfully renamed.
+
+```bash
+g++ -std=c++17 -Wall -Wextra -Wpedantic -O2 main.cpp -lyaml-cpp -o certamen
+```
+> [!NOTE]
+> This builds a local-only binary without the TUI or SSH server. Use the CMake build for the included features.
 
 ---
 
