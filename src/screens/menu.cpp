@@ -19,12 +19,21 @@ ftxui::Component make_menu_screen(AppState& state)
         "  Set Author and Name",
         "  Save",
         "  Load Quiz File",
+        "  Manual",
     };
 
     auto menu = Menu(&entries, &state.menu_selected);
     auto component = Container::Vertical({menu});
 
     component |= CatchEvent([&](Event event) {
+        if (event == Event::Character('0'))
+        {
+            state.manual_topic = 0;
+            state.manual_scroll = 0;
+            state.current_screen = AppScreen::MANUAL;
+            return true;
+        }
+
         if (event.is_character())
         {
             char ch = event.character()[0];
@@ -135,6 +144,11 @@ ftxui::Component make_menu_screen(AppState& state)
                     state.load_screen_mode = 1;
                     state.current_screen = AppScreen::LOAD_QUIZ;
                     return true;
+                case 9:
+                    state.manual_topic = 0;
+                    state.manual_scroll = 0;
+                    state.current_screen = AppScreen::MANUAL;
+                    return true;
             }
         }
         return false;
@@ -189,7 +203,7 @@ ftxui::Component make_menu_screen(AppState& state)
         }
 
         content.push_back(separator() | color(Color::GrayDark));
-        content.push_back(text(" 1-9 select  R randomise  Enter confirm  q quit ") | dim | center);
+        content.push_back(text(" 1-9 select  0 manual  R randomise  Enter confirm  q quit ") | dim | center);
 
         return vbox(std::move(content)) | borderRounded;
     });

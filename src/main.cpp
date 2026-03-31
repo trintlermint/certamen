@@ -15,6 +15,7 @@
 #include "screens/load_quiz.hpp"
 #include "screens/quiz_setup.hpp"
 #include "screens/pick_file.hpp"
+#include "screens/manual.hpp"
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
@@ -155,6 +156,7 @@ static int run_local(const std::vector<std::string>& files)
     auto load_quiz_screen       = make_load_quiz_screen(state);
     auto quiz_setup_screen      = make_quiz_setup_screen(state);
     auto pick_file_screen       = make_pick_file_screen(state);
+    auto manual_screen_comp     = make_manual_screen(state);
 
     int screen_index = 0;
     Components screens = {
@@ -172,6 +174,7 @@ static int run_local(const std::vector<std::string>& files)
         load_quiz_screen,
         quiz_setup_screen,
         pick_file_screen,
+        manual_screen_comp,
     };
     auto tab = Container::Tab(std::move(screens), &screen_index);
 

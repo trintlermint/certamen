@@ -24,6 +24,7 @@ enum class AppScreen
     LOAD_QUIZ,
     QUIZ_SETUP,
     PICK_FILE,
+    MANUAL,
 };
 
 struct LoadedFile
@@ -96,6 +97,9 @@ struct AppState
     std::vector<int> quiz_file_order;
     int quiz_setup_phase = 0;   // 0 => yorue selecting the files, 1 => youre ordering them
     int quiz_setup_cursor = 0;
+
+    int manual_topic = 0;
+    int manual_scroll = 0;
 
     // rm question
     int remove_question_idx = 0;
