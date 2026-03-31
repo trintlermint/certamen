@@ -111,11 +111,6 @@ Or add it to your config with the following
 }
 ```
 
-> [!WARNING]
-> To be clear, the Nix package supports the earlier CLI version named `quizzer`,
-> if you want to get the updated TUI, please compile from source, OR help
-> contribute! See [CONTRIBUTING](CONTRIBUTING.md).
-
 ### Dependencies
 
 Certamen uses these predominant three libraries:
