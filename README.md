@@ -26,7 +26,7 @@ documenting the development process for this project.
 [![AUR version](https://img.shields.io/aur/version/certamen)](https://aur.archlinux.org/packages/certamen)
 [![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=linux%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
 [![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=macOS%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
-[![Windows CI](https://img.shields.io/badge/windows-CI%20failing%20(incompatible)-red](https://github.com/trintlermint/certamen/actions)
+[![Windows CI](https://img.shields.io/badge/windows-CI%20failing%20%28incompatible%29-red)](https://github.com/trintlermint/certamen/actions)
 
 ### Notes
 
