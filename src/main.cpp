@@ -26,20 +26,103 @@
 
 using namespace ftxui;
 
-static void print_usage(const char* prog)
+static void print_help(const char* prog)
 {
-    std::cout << "Usage:\n"
-              << "  " << prog << " [quiz.yaml ...]           Local TUI mode\n"
-              << "  " << prog << " serve [options] <files>   SSH server mode\n"
-              << "\nServe options:\n"
-              << "  --port <N>          Listen port (default: 2222)\n"
-              << "  --password <pw>     Require password (default: open)\n"
-              << "  --key <path>        Host key (default: certamen_host_rsa)\n"
-              << "  --max-clients <N>   Max concurrent clients (default: 8)\n"
-              << "\nExamples:\n"
-              << "  " << prog << " example_quiz.yaml\n"
-              << "  " << prog << " serve --port 2222 --password secret quiz.yaml\n"
-              << "  ssh -p 2222 quiz@localhost\n";
+    std::cout
+        << "CERTAMEN; Terminal quiz game engine\n"
+        << "\n"
+        << "USAGE\n"
+        << "  " << prog << "                           Start empty (load files from TUI or create one!)\n"
+        << "  " << prog << " <a.yaml b.yaml ...>           Load >1 quiz files\n"
+        << "  " << prog << " serve [options] <files>   Host an SSH quiz server\n"
+        << "  " << prog << " -h, --help                Show this help menu!\n"
+        << "\n"
+        << "LOCAL MODE\n"
+        << "  Opens the executable regularly. Pass zero or more .yaml quiz files as stdin arguments.\n"
+        << "  With no arguments, the program starts empty and load files from the Load Quiz File menu.\n"
+        << "  With multiple files, each file's questions are tracked separately, letting you choose.\n"
+        << "\n"
+        << "TUI KEYBINDINGS\n"
+        << "  Main menu:\n"
+        << "    1-9           Jump to menu entry\n"
+        << "    j/k, arrows   Navigate menu\n"
+        << "    Enter         Confirm selection\n"
+        << "    r             Toggle randomised question/answer order\n"
+        << "    q             Quit (asks for confirmation)\n"
+        << "\n"
+        << "  Quiz:\n"
+        << "    j/k, arrows   Navigate answers\n"
+        << "    1-9           Jump to answer\n"
+        << "    Enter         Submit answer / next question\n"
+        << "    q, Esc        Quit quiz (asks for confirmation)\n"
+        << "\n"
+        << "  Editing screens (Add, Remove, Change Answer, Edit Choice):\n"
+        << "    j/k, arrows   Navigate items\n"
+        << "    Enter         Select / confirm\n"
+        << "    Esc, b        Go back one step\n"
+        << "\n"
+        << "  Load Quiz File:\n"
+        << "    Tab           Switch between file list and input\n"
+        << "    j/k           Navigate loaded files\n"
+        << "    Right, Enter  Unload selected file\n"
+        << "    Esc           Return to menu\n"
+        << "\n"
+        << "MENU OPTIONS\n"
+        << "  1. Take Quiz        Answer questions, get scored. With multiple files\n"
+        << "                      loaded, pick which files to include and their order.\n"
+        << "  2. Add Question     Compose a question with choices, optional code\n"
+        << "                      snippet (with syntax highlighting), and explanation.\n"
+        << "  3. Remove Question  Delete a question from the quiz.\n"
+        << "  4. Change Answer    Update the correct answer for a question.\n"
+        << "  5. Edit Choice      Edit the text of a choice.\n"
+        << "  6. List Questions   Browse questions with toggleable answers, code,\n"
+        << "                      and explanations.\n"
+        << "  7. Set Author/Name  Set metadata (per-file with multiple files).\n"
+        << "  8. Save             Save changes to disk, view diff before saving.\n"
+        << "  9. Load Quiz File   Load additional .yaml files or unload existing ones.\n"
+        << " 10. Manual           Built-in reference for all features.\n"
+        << "\n"
+        << "  With multiple files loaded, editing operations (2-8) ask which file\n"
+        << "  to target before proceeding.\n"
+        << "\n"
+        << "QUIZ FORMAT (.yaml)\n"
+        << "  name: My Quiz\n"
+        << "  author: yourname\n"
+        << "  questions:\n"
+        << "    - question: What is 2+2?\n"
+        << "      choices: [3, 4, 5, 6]\n"
+        << "      answer: 1              # 0-based index (displayed as 1-based)\n"
+        << "      code: |                # optional code block\n"
+        << "        print(2+2)\n"
+        << "      language: python       # optional code highlighter\n"
+        << "      explain: |             # optional explanation shown after answering\n"
+        << "        Basic arithmetic.\n"
+        << "\n"
+        << "  Required per question: question, choices (>1), answer\n"
+        << "  Optional per question: code, language, explain\n"
+        << "  Optional top-level: name, author\n"
+        << "\n"
+        << "SERVE MODE (SSH)\n"
+        << "  Host quizzes over SSH. Clients connect with any SSH client (as long as they use a compatible term emulator).\n"
+        << "  The SSH username becomes the player's display name.\n"
+        << "\n"
+        << "  " << prog << " serve [options] <quiz.yaml ...>\n"
+        << "\n"
+        << "  Options:\n"
+        << "    --port <N>          Listen port (default: 2222)\n"
+        << "    --password <pw>     Require password (default: open access)\n"
+        << "    --key <path>        RSA host key (default: certamen_host_rsa)\n"
+        << "    --max-clients <N>   Max concurrent connections (default: 8)\n"
+        << "\n"
+        << "  Client connects:  ssh -p 2222 playername@server-ip\n"
+        << "  Server logs scores per player to stdout.\n"
+        << "  Ctrl+C stops the server. See SERVING.md for full documentation.\n"
+        << "\n"
+        << "EXAMPLES\n"
+        << "  " << prog << " quiz.yaml\n"
+        << "  " << prog << " algebra.yaml history.yaml\n"
+        << "  " << prog << " serve --port 3000 --password secret quiz.yaml\n"
+        << "  ssh -p 3000 alice@192.168.1.10\n";
 }
 
 static int run_local(const std::vector<std::string>& files)
@@ -166,7 +249,7 @@ int main(int argc, char* argv[])
                 max_clients = std::stoi(argv[++i]);
             else if (arg == "--help" || arg == "-h")
             {
-                print_usage(argv[0]);
+                print_help(argv[0]);
                 return 0;
             }
             else
@@ -176,7 +259,7 @@ int main(int argc, char* argv[])
         if (files.empty())
         {
             std::cerr << "Error: serve mode requires at least one quiz file.\n";
-            print_usage(argv[0]);
+            print_help(argv[0]);
             return 1;
         }
 
@@ -185,7 +268,7 @@ int main(int argc, char* argv[])
 
     if (first_arg == "--help" || first_arg == "-h")
     {
-        print_usage(argv[0]);
+        print_help(argv[0]);
         return 0;
     }
 
