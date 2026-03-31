@@ -1,4 +1,5 @@
 {
+  cmake,
   stdenv,
   ftxui,
   libssh,
@@ -11,16 +12,20 @@ in
     version = "1.0.0";
     src = ../.;
     buildInputs = [
+      cmake
       ftxui
       libssh
       yaml-cpp
     ];
+    configurePhase = ''
+      cmake -B build -DCMAKE_BUILD_TYPE=Release
+    '';
     buildPhase = ''
-      g++ -std=c++17 -Wall -Wextra -Wpedantic -O2 main.cpp -lyaml-cpp -o certamen
+      cmake --build build
     '';
     installPhase = ''
       mkdir -p $out/bin
-      cp certamen $out/bin/certamen
+      cp ./build/bin/certamen $out/bin/certamen
       chmod +x $out/bin/certamen
     '';
     meta.mainProgram = "certamen";

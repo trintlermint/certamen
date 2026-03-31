@@ -10,14 +10,19 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-include(FetchContent)
-FetchContent_Declare(ftxui
-  GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
-  GIT_TAG v6.1.9
-)
-set(FTXUI_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(FTXUI_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(ftxui)
+find_package(ftxui QUIET)
+
+if (NOT ftxui_FOUND)
+  include(FetchContent)
+  FetchContent_Declare(ftxui
+    GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
+    GIT_TAG v6.1.9
+  )
+  FetchContent_MakeAvailable(ftxui)
+endif()
+
+# set(FTXUI_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+# set(FTXUI_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 
 find_package(yaml-cpp REQUIRED)
 find_package(libssh REQUIRED)
