@@ -9,7 +9,7 @@
 in
   mkDerivation {
     pname = "certamen";
-    version = "1.0.0";
+    version = "1.0.3";
     src = ../.;
     buildInputs = [
       cmake
