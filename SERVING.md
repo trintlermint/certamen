@@ -1,6 +1,8 @@
 # Certamen SSH Server
 
-Any machine running `certamen serve` becomes a quiz server that `<N>` clients can connect to with a standard SSH client.
+Any machine running `certamen serve` becomes a quiz server that `<N>` clients
+can connect to with a standard SSH client.
+
 <p align="center">
   <img src="assets/serve-1.png" width="32%" alt="ssh Demo 1">
   <img src="assets/serve-2.png" width="32%" alt="ssh Demo 2">
@@ -26,32 +28,37 @@ Clients connect with:
 ssh -p 2222 yourname@server-ip
 ```
 
-The username becomes the player's display name, and the server sees the connected users.
+The username becomes the player's display name, and the server sees the
+connected users.
 
 ## Options
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--port <N>` | 2222 | Port to listen on |
-| `--password <pw>` | *none* | Requires this password to connect clients |
-| `--key <path>` | `certamen_host_rsa` | Path to RSA host key |
-| `--max-clients <N>` | 8 | Maximum simultaneous connections |
+| Flag                | Default             | Description                               |
+| ------------------- | ------------------- | ----------------------------------------- |
+| `--port <N>`        | 2222                | Port to listen on                         |
+| `--password <pw>`   | _none_              | Requires this password to connect clients |
+| `--key <path>`      | `certamen_host_rsa` | Path to RSA host key                      |
+| `--max-clients <N>` | 8                   | Maximum simultaneous connections          |
 
 ## Huh? Why so overcomplicated?
 
 1. Server generates an RSA host key on first run (saved to `certamen_host_rsa`)
 2. Client connects via SSH, authenticates with password (if set)
 3. Server forks a PTY child running the quiz TUI
-4. Client sees a name prompt, then quiz selection (if multiple files), then the quiz
+4. Client sees a name prompt, then quiz selection (if multiple files), then the
+   quiz
 5. On completion, the server logs the client's score
 
-Each client gets their own session. The server handles multiple concurrent connections up to `--max-clients`.
+Each client gets their own session. The server handles multiple concurrent
+connections up to `--max-clients`.
 
 ## Authentication
 
-**Open** (default): Any SSH client can connect without a password (after fingerprinting). The SSH username is used as the player name.
+**Open** (default): Any SSH client can connect without a password (after
+fingerprinting). The SSH username is used as the player name.
 
-**Password**: Pass `--password <pw>` to require authentication. Clients will be prompted for the password by their SSH client. Failed attempts are logged.
+**Password**: Pass `--password <pw>` to require authentication. Clients will be
+prompted for the password by their SSH client. Failed attempts are logged.
 
 > REMARK: Password is having some issues right now.
 
@@ -66,7 +73,8 @@ ssh -p 2222 vanilla@192.168.1.10
 
 ## Client Limits
 
-The `--max-clients` flag caps concurrent connections. When the limit is reached, new connections are rejected until an existing client disconnects.
+The `--max-clients` flag caps concurrent connections. When the limit is reached,
+new connections are rejected until an existing client disconnects.
 
 ```bash
 certamen serve --max-clients 20 quiz.yaml
@@ -107,7 +115,8 @@ METRICS [username]: quiz=algebra.yaml
 METRICS [username]: score=8/10
 ```
 
-Metrics are written per-session to a /tmp/ file, read by the server after the session ends, then cleaned up, you can do whatever you desire with that.
+Metrics are written per-session to a /tmp/ file, read by the server after the
+session ends, then cleaned up, you can do whatever you desire with that.
 
 ## Network Setup
 
@@ -123,7 +132,8 @@ ssh -p 2222 player@quiz.example.com
 
 ## Host Key
 
-On first run, the server generates `certamen_host_rsa` in the working directory. Clients will see a host key fingerprint prompt on first connection.
+On first run, the server generates `certamen_host_rsa` in the working directory.
+Clients will see a host key fingerprint prompt on first connection.
 
 To use an existing key:
 
@@ -131,11 +141,13 @@ To use an existing key:
 certamen serve --key /path/to/host_key quiz.yaml
 ```
 
-The key file must be readable only by the owner (permissions `0600`). The server sets this automatically for generated keys.
+The key file must be readable only by the owner (permissions `0600`). The server
+sets this automatically for generated keys.
 
 ## Stopping the Server
 
-Press `Ctrl+C`. The server shuts down. Active sessions finish by themselves in their own right.
+Press `Ctrl+C`. The server shuts down. Active sessions finish by themselves in
+their own right.
 
 ```
 ^C
@@ -146,21 +158,28 @@ Press `Ctrl+C`. The server shuts down. Active sessions finish by themselves in t
 
 What clients experience:
 
-1. *Name prompt*; centered input field asking for their name
-2. *Quiz picker**; if the server hosts multiple quizzes, a menu to choose one
-3. *Quiz*; standard quiz UI
-4. *Results*; score display with gauge, then back to quiz picker (or disconnect)
+1. _Name prompt_; centered input field asking for their name
+2. _Quiz picker_*; if the server hosts multiple quizzes, a menu to choose one
+3. _Quiz_; standard quiz UI
+4. _Results_; score display with gauge, then back to quiz picker (or disconnect)
 
-Clients can press `Escape` at the name prompt to disconnect, or `q` in the quiz picker.
+Clients can press `Escape` at the name prompt to disconnect, or `q` in the quiz
+picker.
 
 ## Troubleshooting
 
-**"Connection refused"**: Server isn't running, wrong port, or firewall blocking.
+**"Connection refused"**: Server isn't running, wrong port, or firewall
+blocking.
 
-**"Connection closed" immediately**: Check logs. Likely a key exchange failure (incompatible SSH client) or the host key file is corrupted. Delete `certamen_host_rsa` and restart to regenerate.
+**"Connection closed" immediately**: Check logs. Likely a key exchange failure
+(incompatible SSH client) or the host key file is corrupted. Delete
+`certamen_host_rsa` and restart to regenerate.
 
-**"Permission denied"**: Wrong password, or server requires a password and client didn't provide one.
+**"Permission denied"**: Wrong password, or server requires a password and
+client didn't provide one.
 
-**Client sees garbled output**: The client terminal may not support the `TERM` type. Try `TERM=xterm ssh -p 2222 ...`.
+**Client sees garbled output**: The client terminal may not support the `TERM`
+type. Try `TERM=xterm ssh -p 2222 ...`.
 
-**Quiz doesn't render correctly**: Terminal must be at least 60 columns wide. Resize before connecting. Sorry about this
+**Quiz doesn't render correctly**: Terminal must be at least 60 columns wide.
+Resize before connecting. Sorry about this
