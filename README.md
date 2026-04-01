@@ -55,7 +55,9 @@ documenting the development process for this project.
 - [Usage](#usage)
   - [Offline user mode](#offline-user-mode)
   - [SSH server mode](#ssh-server-mode)
-- [Quiz format](#quiz-format)
+- [Setup](#setup)
+  - [Quiz Format](#quiz-format)
+  - [Templates](#templates)
 - [Troubleshooting](#troubleshooting)
 - [Credits](#credits)
 - [License](#license)
@@ -159,7 +161,7 @@ cmake --build build
 The binary compiles into an executable, stored at `build/bin/certamen`. Run:
 
 ```bash
-./build/bin/certamen ./example_quiz.yaml
+./build/bin/certamen ./templates/example_quiz.yaml
 ```
 
 Without arguments it looks for `./quiz.yaml` in the current working directory
@@ -183,7 +185,6 @@ cmake --build --preset release
 ```
 
 > [!WARNING]
->
 > I am NOT a macOS OR Windows user; Manuals told me this should work, if it does
 > or doesn't please inform me on Github Issues! See
 > [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -262,13 +263,16 @@ _isolated_ "quiz" session. The server logs scores per player.
 | `--max-clients <N>` | 8                   | Concurrent connection limit          |
 
 > [!IMPORTANT]
->
 > Full server shell documentation: **[SERVING.md](SERVING.md)**. Also, password
 > is currently having issues currently.
 
 ---
 
-## Quiz format
+## Setup
+
+Below is information regarding how to ideally setup certamen and its corresponding quiz files _locally_.
+
+### Quiz format
 
 Quizzes are YAML files. Each question is a map in a top-to-down sequence which
 is nested inside `questions`:
@@ -309,8 +313,17 @@ questions:
   `language: haskell`) (see `syntax.cpp` for what has been implemented thus
   far).
 
-> See [`example_quiz.yaml`](example_quiz.yaml) for a working template and
-> helping me stop writing stuff.
+> See [`./templates/example_quiz.yaml`](./templates/example_quiz.yaml) for a working template and
+> helping me stop writing stuff (for more see below.)
+
+### Templates
+
+As is understandable, it is very helpful to look at premade quizzes which arent just the template `example_quiz.yaml`,
+and for this reason, in the directory `templates/` you will be able to find various community made quizzes to help you
+take some quizzes without needing to make it all by yourself!
+Try them out! and if you find errors, you can always send us an issue!
+
+> So far, they are just some university practice exams of mine! ( O - O)
 
 ---
 

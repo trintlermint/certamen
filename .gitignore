@@ -32,11 +32,6 @@ compile_commands.json
 *.app
 certamen
 
-# local quiz databases / test files
-quiz.yaml
-test*.yaml
-test*.md
-
 # OS generated
 .DS_Store
 .DS_Store?
@@ -55,4 +50,5 @@ Thumbs.db
 # Program generated files
 certamen_host_rsa
 *.yaml
+!templates/*
 /.direnv

@@ -1,0 +1,1092 @@
+name: Network Systems Practice Exam for part 3
+author: trintlermint
+questions:
+  - question: In TCP, what is the primary role of congestion control?
+    explain: Congestion control protects the network from overload by adapting sender rate.
+    choices:
+      - Prevent overloading the network
+      - Prevent overloading the receiver application buffer
+      - Encrypt packets end-to-end
+      - Guarantee zero packet loss
+    answer: 0
+    language: text
+
+  - question: In TCP, what is the primary role of flow control?
+    explain: Flow control prevents sender from overwhelming receiver-side buffering/processing.
+    choices:
+      - Prevent overloading the network core
+      - Prevent overloading the receiver
+      - Detect bit errors on links
+      - Replace congestion control
+    answer: 1
+    language: text
+
+  - question: Which RTT component typically increases first when congestion starts building?
+    explain: Queueing delay grows as buffers fill.
+    choices:
+      - Propagation delay
+      - Transmission delay due to slower links
+      - Queueing delay
+      - Cryptographic processing delay
+    answer: 2
+    language: text
+
+  - question: In classic TCP AIMD, after a timeout event, congestion window behavior is best described as...
+    explain: Timeout indicates severe congestion, cwnd reset near 1 MSS and slow start resumes.
+    choices:
+      - Keep cwnd unchanged
+      - Halve cwnd and continue additive increase immediately
+      - Reset cwnd to initial value and enter slow start
+      - Double cwnd to recover quickly
+    answer: 2
+    language: text
+
+  - question: In classic TCP New Reno, triple duplicate ACK usually triggers...
+    explain: Triple dup ACK suggests isolated loss; cwnd is reduced multiplicatively and fast recovery used.
+    choices:
+      - Immediate connection teardown
+      - Multiplicative decrease with fast recovery
+      - Slow start from scratch always
+      - Disabling retransmissions
+    answer: 1
+    language: text
+
+  - question: During additive increase in TCP AIMD, cwnd grows approximately by...
+    explain: Standard AIMD increases cwnd by about 1 MSS per RTT.
+    choices:
+      - 1 MSS per RTT
+      - 2 MSS per ACK
+      - 1 MSS per packet loss
+      - Exponential doubling each RTT
+    answer: 0
+    language: text
+
+  - question: Why can fixed cwnd values (same for all flows) be unfair?
+    explain: Different RTTs produce different throughputs even with same cwnd.
+    choices:
+      - Because encryption changes packet sizes
+      - Because RTT differences cause throughput differences
+      - Because DNS caching interferes
+      - Because UDP is prioritized by routers
+    answer: 1
+    language: text
+
+  - question: TCP CUBIC primarily increases cwnd as a function of...
+    explain: CUBIC is time-based growth around prior Wmax.
+    choices:
+      - ACK count only
+      - Packet size only
+      - Time since last loss event
+      - Receiver buffer occupancy only
+    answer: 2
+    language: text
+
+  - question: A key fairness benefit of CUBIC compared with purely ACK-clocked growth is...
+    explain: Time-based growth reduces RTT bias.
+    choices:
+      - Eliminates need for retransmissions
+      - Reduces dependence on RTT for growth speed
+      - Forces identical cwnd for all flows
+      - Makes loss impossible
+    answer: 1
+    language: text
+
+  - question: ECN allows routers to signal congestion by...
+    explain: Marking packets instead of dropping can signal congestion early.
+    choices:
+      - Corrupting payload bytes
+      - Resetting TCP sequence numbers
+      - Marking ECN bits in IP header
+      - Sending DNS TXT records
+    answer: 2
+    language: text
+
+  - question: If a sender ignores ECN Congestion Experienced marks while others respond correctly, likely effect is...
+    explain: Non-responsive flow may grab more than fair share.
+    choices:
+      - It will get less bandwidth than fair share
+      - It may get more than fair share
+      - It will be forced to use UDP
+      - No impact in any case
+    answer: 1
+    language: text
+
+  - question: In token bucket (rate r, bucket B), B primarily limits...
+    explain: Bucket size determines maximum burst tolerance.
+    choices:
+      - Long-term average rate
+      - Maximum packet size
+      - Maximum burst size
+      - Number of flows
+    answer: 2
+    language: text
+
+  - question: In token bucket, rate r primarily constrains...
+    explain: Token generation rate sets sustained sending rate.
+    choices:
+      - Long-term average send rate
+      - Initial burst only
+      - Packet TTL
+      - Queue discipline type
+    answer: 0
+    language: text
+
+  - question: A token bucket-policed flow sending less than allowed in one interval is...
+    explain: Token bucket is an upper bound, not minimum reservation usage requirement.
+    choices:
+      - Always non-compliant
+      - Compliant; sending less is allowed
+      - Forced to compensate immediately next millisecond
+      - Dropped by default
+    answer: 1
+    language: text
+
+  - question: Two token-bucket flows (B1,r1) and (B2,r2) merged can be upper-bounded by...
+    explain: Safe aggregate envelope commonly uses B1+B2 and r1+r2.
+    choices:
+      - (max(B1,B2), max(r1,r2))
+      - (B1+B2, r1+r2)
+      - (B1*B2, r1*r2)
+      - Not representable by any token bucket
+    answer: 1
+    language: text
+
+  - question: Fair Queueing (FQ) aims to approximate...
+    explain: Bit-by-bit round robin fairness across active flows/classes.
+    choices:
+      - First-come-first-serve
+      - Strict priority for smallest packets
+      - Generalized processor sharing fairness
+      - Random early dropping only
+    answer: 2
+    language: text
+
+  - question: With FQ and two backlogged classes, unused share from one class is typically...
+    explain: Work-conserving schedulers redistribute unused capacity.
+    choices:
+      - Left idle permanently
+      - Given to active classes
+      - Converted to retransmission overhead
+      - Reserved for ICMP
+    answer: 1
+    language: text
+
+  - question: Priority queueing compared to FQ most risks...
+    explain: Low-priority starvation can occur with sustained high-priority traffic.
+    choices:
+      - Starvation of low-priority traffic
+      - Equal share always
+      - Encryption failure
+      - Eliminating jitter completely
+    answer: 0
+    language: text
+
+  - question: Expedited Forwarding (DiffServ EF) is intended to emulate...
+    explain: EF strives for low loss/low delay behavior akin lightly loaded service.
+    choices:
+      - Bulk-transfer-only best effort
+      - Lightly loaded virtual leased line behavior
+      - Guaranteed confidentiality
+      - IP multicast setup
+    answer: 1
+    language: text
+
+  - question: Why best-effort Internet often still supports decent real-time calls?
+    explain: In many paths, typical utilization leaves short queues most of the time.
+    choices:
+      - Propagation delay is zero
+      - Routers retransmit all lost packets instantly
+      - Queues are often short in practice
+      - UDP reserves bandwidth globally
+    answer: 2
+    language: text
+
+  - question: Which delay component contributes most to jitter variation?
+    explain: Queueing delay fluctuates with load.
+    choices:
+      - Propagation delay
+      - Queueing delay
+      - Header parsing delay
+      - CRC generation delay
+    answer: 1
+    language: text
+
+  - question: Security goal violated by replaying an old valid order is...
+    explain: Replay attacks violate freshness.
+    choices:
+      - Confidentiality
+      - Freshness
+      - Availability
+      - Accountability
+    answer: 1
+    language: text
+
+  - question: Attack where adversary pretends to be another user is...
+    explain: Identity impersonation is masquerade.
+    choices:
+      - Sabotage
+      - Eavesdropping
+      - Masquerade
+      - Repudiation
+    answer: 2
+    language: text
+
+  - question: Reading private data without authorization violates...
+    explain: Unauthorized disclosure breaks confidentiality.
+    choices:
+      - Integrity
+      - Confidentiality
+      - Availability
+      - Freshness
+    answer: 1
+    language: text
+
+  - question: Modifying message content in transit violates...
+    explain: Unauthorized alteration is integrity violation.
+    choices:
+      - Origin authentication
+      - Integrity
+      - Availability
+      - Authorization only
+    answer: 1
+    language: text
+
+  - question: Overwhelming a server with traffic so it cannot serve users primarily violates...
+    explain: Service disruption targets availability.
+    choices:
+      - Confidentiality
+      - Availability
+      - Freshness
+      - Non-repudiation
+    answer: 1
+    language: text
+
+  - question: A collision attack on a hash function means...
+    explain: Finding two different inputs with same hash output.
+    choices:
+      - Recovering secret key from ciphertext
+      - Finding two different messages with same hash
+      - Reversing any hash instantly
+      - Breaking all digital signatures directly
+    answer: 1
+    language: text
+
+  - question: Why did weak collision resistance (e.g., SHA-1) become problematic for certificates?
+    explain: Collisions can help craft rogue cert artifacts under certain signing models.
+    choices:
+      - It made HTTPS impossible over TCP
+      - It enabled practical downgrade to plaintext only
+      - It weakened trust in certificate signatures
+      - It removed need for CAs
+    answer: 2
+    language: text
+
+  - question: A MAC with shared key K between Alice and Bob proves message came from...
+    explain: Either key holder could have generated it.
+    choices:
+      - Alice only
+      - Bob only
+      - Either Alice or Bob
+      - Any Internet host
+    answer: 2
+    language: text
+
+  - question: Digital signatures primarily provide...
+    explain: Public verifiability of origin/integrity tied to signer private key.
+    choices:
+      - Shared-secret confidentiality only
+      - Origin authentication and integrity
+      - Queueing fairness
+      - Perfect forward secrecy by themselves always
+    answer: 1
+    language: text
+
+  - question: Plain Diffie-Hellman without authentication is vulnerable to...
+    explain: MITM can establish separate keys with each side.
+    choices:
+      - ARP cache poisoning only
+      - Man-in-the-middle attack
+      - DNSSEC validation failure only
+      - Replay impossible by design
+    answer: 1
+    language: text
+
+  - question: Adding signatures to Diffie-Hellman values mainly addresses...
+    explain: Signatures authenticate peers/ephemeral values.
+    choices:
+      - Compression ratio
+      - Origin authentication
+      - Packet fragmentation
+      - Queue management
+    answer: 1
+    language: text
+
+  - question: Number of symmetric pairwise keys needed for n users (full mesh) is...
+    explain: One unique key per unordered pair.
+    choices:
+      - n
+      - 2n
+      - n(n-1)/2
+      - n^2
+    answer: 2
+    language: text
+
+  - question: Number of public keys needed for n users in asymmetric system is...
+    explain: Each user has one public key.
+    choices:
+      - n
+      - n(n-1)/2
+      - 2n
+      - n^2
+    answer: 0
+    language: text
+
+  - question: In Kerberos, Ticket Granting Ticket (TGT) is used to...
+    explain: TGT lets client obtain service tickets from TGS without re-entering password.
+    choices:
+      - Encrypt all application data directly forever
+      - Request service tickets from TGS
+      - Replace DNS lookups
+      - Revoke CA certificates
+    answer: 1
+    language: text
+
+  - question: In HTTPS certificate validation, client must verify...
+    explain: Chain to trusted root plus validity and signature correctness.
+    choices:
+      - Issuer, subject, public key, validity, signature chain
+      - Subject only
+      - Serial number only
+      - TCP window scaling option
+    answer: 0
+    language: text
+
+  - question: TLS certificate signature verification usually requires...
+    explain: Verification is local using chain and trust store (plus revocation checks optionally).
+    choices:
+      - Mandatory online query to CA for every handshake
+      - No further communication for basic signature check
+      - Contacting Kerberos AS
+      - Querying DNS MX records
+    answer: 1
+    language: text
+
+  - question: If a trusted CA private key is compromised, attacker can...
+    explain: Rogue cert issuance can enable impersonation.
+    choices:
+      - Impersonate websites with forged trusted certs
+      - Decrypt all historic TLS by default always
+      - Disable all browsers globally
+      - Break TCP checksums
+    answer: 0
+    language: text
+
+  - question: In IPSec, ESP primarily provides...
+    explain: ESP supports confidentiality and optional integrity/authentication.
+    choices:
+      - Routing table convergence
+      - Confidentiality (and optionally integrity/authentication)
+      - DNS recursion
+      - Application-layer compression
+    answer: 1
+    language: text
+
+  - question: AH primarily provides...
+    explain: AH gives integrity/authentication for packet (except mutable fields).
+    choices:
+      - Confidentiality only
+      - Integrity/authentication without encryption
+      - NAT traversal only
+      - Session resumption
+    answer: 1
+    language: text
+
+  - question: For site-to-site protection of entire inter-site traffic, strongest common IPSec choice is...
+    explain: Tunnel mode ESP protects inner packets across gateways.
+    choices:
+      - Transport mode AH only
+      - Transport mode ESP only
+      - Tunnel mode ESP
+      - No IPSec needed
+    answer: 2
+    language: text
+
+  - question: Which outer IP header fields are protected for integrity by ESP in transport mode?
+    explain: ESP does not integrity-protect full outer IP header like AH does.
+    choices:
+      - All outer header fields
+      - None of the outer IP header fields fully
+      - TTL only
+      - Source and destination only always
+    answer: 1
+    language: text
+
+  - question: Similarity between TLS and IPSec is that both...
+    explain: TLS handshake, IKE for IPSec key management.
+    choices:
+      - Are only for TCP payload tunneling
+      - Always require manual static keys
+      - Have dedicated handshake/key-establishment protocols
+      - Guarantee confidentiality even when disabled
+    answer: 2
+    language: text
+
+  - question: In stateless firewalling, default-deny (allow-listing) typically implemented by...
+    explain: Final catch-all drop rule.
+    choices:
+      - First rule allow all
+      - Last rule drop all unmatched traffic
+      - Last rule allow all unmatched traffic
+      - No default rule needed
+    answer: 1
+    language: text
+
+  - question: Anti-spoofing ingress rule at Internet-facing interface often checks...
+    explain: Drop incoming packets claiming internal source prefixes.
+    choices:
+      - Source IP belongs to internal network -> drop
+      - Destination is port 53 -> drop
+      - ACK flag set -> drop always
+      - Packet length > 1500 -> drop
+    answer: 0
+    language: text
+
+  - question: Stateful firewall tracks whether packet belongs to...
+    explain: Connection state (NEW/ESTABLISHED/RELATED) is key.
+    choices:
+      - A known established connection
+      - A specific DNS zone only
+      - A valid TLS certificate chain
+      - A compressed payload
+    answer: 0
+    language: text
+
+  - question: Common performance optimization for rule-based firewalls is...
+    explain: Place most frequently matched accept/drop rules earlier.
+    choices:
+      - Sort rules alphabetically
+      - Put frequently matched rules near top
+      - Remove all drop rules
+      - Duplicate each rule twice
+    answer: 1
+    language: text
+
+  - question: IDS differs from IPS because IDS...
+    explain: IDS detects/alerts; IPS can actively block/prevent.
+    choices:
+      - Can only run on endpoints
+      - Detects but does not necessarily block
+      - Replaces all firewall functions
+      - Encrypts suspicious traffic
+    answer: 1
+    language: text
+
+  - question: To automatically block detected scans in-line, you generally need...
+    explain: Prevention action requires IPS or IDS tightly integrated with enforcement.
+    choices:
+      - HIDS only
+      - NIDS only with no control channel
+      - IPS capability
+      - Token bucket policing
+    answer: 2
+    language: text
+
+  - question: Detecting local password file tampering is best suited for...
+    explain: Host artifacts are best observed by HIDS/FIM on host.
+    choices:
+      - NIDS only
+      - HIDS
+      - Router ACL only
+      - DNSSEC validator
+    answer: 1
+    language: text
+
+  - question: Detecting encrypted data exfiltration content purely via NIDS is hard mainly because...
+    explain: Payload encrypted; only metadata visible.
+    choices:
+      - NIDS cannot see packet headers
+      - Encryption hides payload content
+      - NIDS cannot see IP addresses
+      - TCP forbids monitoring
+    answer: 1
+    language: text
+
+  - question: Which application is generally elastic?
+    explain: Elastic apps adapt throughput/delay, e.g., email/file transfer.
+    choices:
+      - Fixed-rate real-time video only
+      - Email transfer
+      - Interactive voice with strict playout
+      - Live teleoperation with hard real-time deadlines
+    answer: 1
+    language: text
+
+  - question: Fixed-quality real-time video over TCP is best classified as...
+    explain: App requirement is non-elastic even if transport adapts.
+    choices:
+      - Fully elastic by requirement
+      - Non-elastic by application requirement
+      - Not a network application
+      - Always fair under congestion
+    answer: 1
+    language: text
+
+  - question: Major barrier to global QoS deployment across many ASes includes...
+    explain: Inter-domain economics/coordination complexity.
+    choices:
+      - Impossible to classify packets
+      - Inter-provider business/payment coordination
+      - Routers cannot queue packets
+      - TCP forbids prioritization
+    answer: 1
+    language: text
+
+  - question: In Fair Queueing with saturated classes of equal weight, each class gets...
+    explain: Equal share among active equal-weight classes.
+    choices:
+      - Strict priority for earliest flow
+      - Equal bandwidth share
+      - Share proportional to RTT
+      - Only leftover bandwidth
+    answer: 1
+    language: text
+
+  - question: A replay-protection mechanism in protocols often uses...
+    explain: Nonces/sequence numbers/timestamps to ensure freshness.
+    choices:
+      - Larger MTU
+      - Nonces or sequence numbers
+      - Additional DNS records
+      - Router buffer expansion only
+    answer: 1
+    language: text
+
+  - question: Origin authentication means receiver can be assured of...
+    explain: Identity of claimed sender/source of message.
+    choices:
+      - Message confidentiality only
+      - Sender identity of message origin
+      - Guaranteed delivery latency
+      - Network path optimality
+    answer: 1
+    language: text
+
+  - question: Accountability (non-repudiation context) is strongest with...
+    explain: Digital signatures provide transferable proof stronger than shared MAC.
+    choices:
+      - Shared MAC keys
+      - Digital signatures
+      - Plain hashes
+      - UDP checksums
+    answer: 1
+    language: text
+
+  - question: In protocol notation, a nonce is typically...
+    explain: Fresh random/unpredictable value used once.
+    choices:
+      - A long-term private key
+      - A one-time freshness value
+      - A routing metric
+      - A certificate revocation list
+    answer: 1
+    language: text
+
+  - question: If two parties share only symmetric key and both can MAC, proving which one sent a past message is...
+    explain: Ambiguous to third parties due to shared secret.
+    choices:
+      - Cryptographically impossible ambiguity removal without extra mechanisms
+      - Always trivially provable in court
+      - Solved by increasing MAC length only
+      - Solved by changing UDP port
+    answer: 0
+    language: text
+
+  - question: In TLS PKI, trust anchors are usually...
+    explain: Root CA certs in browser/OS trust stores.
+    choices:
+      - DNS resolvers
+      - Root certificates in trust store
+      - Local router ARP table
+      - Kerberos tickets
+    answer: 1
+    language: text
+
+  - question: If server private key is leaked, immediate action should include...
+    explain: Revoke/replace cert and keypair.
+    choices:
+      - Do nothing; private key leak is harmless
+      - Revoke old cert and deploy new keypair/cert
+      - Change only server IP address
+      - Reinstall all client browsers globally
+    answer: 1
+    language: text
+
+  - question: In DiffServ, DSCP abuse by end users is mitigated mainly by...
+    explain: Edge policing/remarking at administrative boundaries.
+    choices:
+      - End-user OS prohibition universally
+      - Core routers trusting all markings
+      - Edge routers/policers enforcing policy
+      - TLS certificate checks
+    answer: 2
+    language: text
+
+  - question: Which TCP variant is generally more delay-sensitive in congestion detection?
+    explain: Vegas uses RTT/queueing signals.
+    choices:
+      - TCP Vegas
+      - Stop-and-wait ARQ
+      - UDP
+      - DNS over HTTPS
+    answer: 0
+    language: text
+
+  - question: With Vegas competing against loss-based Reno on same bottleneck, typical outcome often is...
+    explain: Conservative delay-based flow may yield bandwidth to aggressive loss-based flow.
+    choices:
+      - Vegas dominates always
+      - Reno may take larger share
+      - Exact 50/50 guaranteed
+      - Both always starve
+    answer: 1
+    language: text
+
+  - question: In stateless ACLs, allowing return traffic for outbound TCP often relies on...
+    explain: Matching ACK (or ephemeral ports) heuristics.
+    choices:
+      - ICMP echo-request only
+      - ACK flag / ephemeral-port matching
+      - TLS SNI inspection only
+      - ARP request counting
+    answer: 1
+    language: text
+
+  - question: DNS commonly uses which transport/port behavior?
+    explain: UDP 53 for most queries; TCP 53 also used (e.g., large responses/zone transfer).
+    choices:
+      - UDP only on port 25
+      - TCP only on port 80
+      - UDP and TCP on port 53
+      - SCTP only on port 443
+    answer: 2
+    language: text
+
+  - question: HTTPS over TCP usually uses destination port...
+    explain: Standard HTTPS port.
+    choices:
+      - 22
+      - 53
+      - 443
+      - 3389
+    answer: 2
+    language: text
+
+  - question: SMTP server port for receiving mail is typically...
+    explain: SMTP server listens on 25 (classic relay/server).
+    choices:
+      - 25
+      - 53
+      - 110
+      - 143
+    answer: 0
+    language: text
+
+  - question: Why are ingress anti-spoofing rules useful?
+    explain: They block forged source prefixes entering wrong interface.
+    choices:
+      - To increase cryptographic key size
+      - To prevent forged source-address traffic
+      - To accelerate DNSSEC signing
+      - To enforce application QoS directly
+    answer: 1
+    language: text
+
+  - question: In firewall policy terms, allow-listing means...
+    explain: Permit only explicitly allowed traffic; drop rest.
+    choices:
+      - Allow everything except known bad
+      - Block all including allowed
+      - Allow only explicit rules and deny remainder
+      - Randomly sample traffic
+    answer: 2
+    language: text
+
+  - question: In deny-listing policy, typical final rule is...
+    explain: Default allow after blocking known bad patterns.
+    choices:
+      - Drop all unmatched
+      - Accept all unmatched
+      - Accept only DNS unmatched
+      - Mirror unmatched packets
+    answer: 1
+    language: text
+
+  - question: A SYN flood attack primarily targets...
+    explain: Consumes connection state/backlog reducing service.
+    choices:
+      - Confidentiality
+      - Availability
+      - Integrity only
+      - Non-repudiation
+    answer: 1
+    language: text
+
+  - question: Best description of freshness goal
+    explain: Ensures data is recent and not replayed.
+    choices:
+      - Prevents unauthorized read access
+      - Detects replay/old-message reuse
+      - Ensures low latency
+      - Ensures packet order only
+    answer: 1
+    language: text
+
+  - question: Which statement about cryptographic hashes is correct?
+    explain: Hashes are one-way digests; collision resistance desired.
+    choices:
+      - Designed so similar inputs always give similar outputs
+      - Intended to be reversible with private key
+      - Collision resistance means hard to find same digest for two inputs
+      - Replace encryption for confidentiality
+    answer: 2
+    language: text
+
+  - question: MD5 collision practicality implies attacker can...
+    explain: Construct colliding message pairs, undermining integrity uses.
+    choices:
+      - Instantly recover plaintext from hash
+      - Create different messages with same MD5 hash
+      - Break AES keys directly
+      - Force packet propagation delay
+    answer: 1
+    language: text
+
+  - question: Diffie-Hellman output is fundamentally...
+    explain: Produces shared secret keying material.
+    choices:
+      - Shared symmetric secret
+      - Shared private/public key pair
+      - Signed certificate chain
+      - Firewall ACL
+    answer: 0
+    language: text
+
+  - question: Nonces in challenge-response mainly ensure...
+    explain: Liveness/freshness of participant responses.
+    choices:
+      - Compression efficiency
+      - Freshness and replay resistance
+      - Larger RSA modulus
+      - Confidentiality without encryption
+    answer: 1
+    language: text
+
+  - question: In RSA brute force thought experiment, increasing key bits significantly...
+    explain: Search space grows exponentially with key length.
+    choices:
+      - Increases effort linearly
+      - Usually decreases effort
+      - Explodes effort exponentially
+      - Has no effect
+    answer: 2
+    language: text
+
+  - question: For pairwise symmetric keys among n users, scaling challenge is...
+    explain: O(n^2) key management burden.
+    choices:
+      - O(1)
+      - O(log n)
+      - O(n)
+      - O(n^2)
+    answer: 3
+    language: text
+
+  - question: For asymmetric setup with one key pair per user, public-key count scales as...
+    explain: One public key each, so O(n).
+    choices:
+      - O(n)
+      - O(n^2)
+      - O(2^n)
+      - O(n!)
+    answer: 0
+    language: text
+
+  - question: Which best describes a NIDS strength?
+    explain: Network-wide traffic pattern monitoring (e.g., scans).
+    choices:
+      - Detect local file tampering only
+      - Observe cross-host network behavior
+      - Replace endpoint antivirus entirely
+      - Decrypt all TLS by default
+    answer: 1
+    language: text
+
+  - question: Which best describes a HIDS strength?
+    explain: Host-level logs/files/process integrity.
+    choices:
+      - Global BGP anomaly detection
+      - Host artifact and local event visibility
+      - ISP backbone congestion control
+      - PKI root management
+    answer: 1
+    language: text
+
+  - question: An IPS can be seen as...
+    explain: Detection plus enforcement/prevention actions.
+    choices:
+      - IDS without alerts
+      - Firewall without rules
+      - IDS integrated with blocking/prevention
+      - Only a host audit logger
+    answer: 2
+    language: text
+
+  - question: In fair queueing examples, packet transmission order is based on...
+    explain: Virtual finish times, not simple arrival order.
+    choices:
+      - Strict arrival order only
+      - Random packet selection
+      - Virtual finish time scheduling
+      - Largest-packet-first
+    answer: 2
+    language: text
+
+  - question: If link capacity doubles and offered load doubles proportionally at same utilization regime, queueing delay tends to...
+    explain: Under similar utilization and scaled service/arrival rates, delay can remain similar.
+    choices:
+      - Always become zero
+      - Roughly stay similar
+      - Always double exactly
+      - Always quadruple
+    answer: 1
+    language: text
+
+  - question: Which traffic class is usually most sensitive to latency/jitter?
+    explain: Interactive real-time media.
+    choices:
+      - Batch backup jobs
+      - Interactive voice/video
+      - Software updates
+      - Email sync
+    answer: 1
+    language: text
+
+  - question: In TCP slow start, cwnd growth per RTT is approximately...
+    explain: Exponential (roughly doubling per RTT until threshold/loss).
+    choices:
+      - Constant
+      - Linear +1 MSS
+      - Exponential doubling
+      - Negative
+    answer: 2
+    language: text
+
+  - question: Slow start usually transitions to congestion avoidance when...
+    explain: cwnd reaches ssthresh.
+    choices:
+      - RTT drops below minimum
+      - cwnd reaches ssthresh
+      - ACKs stop completely
+      - DNS TTL expires
+    answer: 1
+    language: text
+
+  - question: Multiplicative decrease in AIMD commonly means...
+    explain: Reduce cwnd by factor (often half) on congestion signal.
+    choices:
+      - cwnd = cwnd + 1
+      - cwnd = cwnd * 2
+      - cwnd = cwnd / 2
+      - cwnd = 0 permanently
+    answer: 2
+    language: text
+
+  - question: Why does RTT influence throughput for Reno-like TCP?
+    explain: Increase is per RTT; shorter RTT ramps faster.
+    choices:
+      - Short RTT gets fewer ACKs
+      - Throughput independent of RTT always
+      - Window growth clocked by ACK/RTT dynamics
+      - RTT affects only DNS
+    answer: 2
+    language: text
+
+  - question: Which of the following is true about UDP and congestion control?
+    explain: UDP has no built-in CC; application must implement if needed.
+    choices:
+      - UDP includes mandatory AIMD
+      - UDP has no built-in congestion control
+      - UDP always fair by default
+      - UDP cannot carry real-time media
+    answer: 1
+    language: text
+
+  - question: In VPN gateway-to-gateway IPSec tunnel mode, protected payload is mainly...
+    explain: Entire original IP packet encapsulated as inner packet.
+    choices:
+      - Only TCP payload bytes
+      - Inner original IP packet
+      - Ethernet preamble
+      - DNS cache entries
+    answer: 1
+    language: text
+
+  - question: Certificate revocation mechanisms include...
+    explain: CRL and OCSP are common revocation checks.
+    choices:
+      - NAT and PAT
+      - CRL/OCSP
+      - DHCP and ARP
+      - SNMP traps only
+    answer: 1
+    language: text
+
+  - question: A stateful firewall rule allowing ESTABLISHED traffic typically should be placed...
+    explain: Early match improves performance and correctness.
+    choices:
+      - Near top of ruleset
+      - Always at very end after default drop
+      - Not needed in stateful firewalls
+      - Only on outbound interface
+    answer: 0
+    language: text
+
+  - question: In stateless rules, why is ACK-based allowance imperfect?
+    explain: ACK flag can be spoofed; no true connection state tracking.
+    choices:
+      - ACK bit is encrypted
+      - ACK proves cryptographic identity
+      - ACK heuristics can be bypassed/spoofed
+      - ACK not present in TCP
+    answer: 2
+    language: text
+
+  - question: Which scenario best matches sabotage attack?
+    explain: Deliberate damaging/disrupting system operation.
+    choices:
+      - Passive packet sniffing
+      - Deliberately breaking service/system operation
+      - Generating valid signatures
+      - Verifying CA chains
+    answer: 1
+    language: text
+
+  - question: Which security goal is violated if attacker changes webshop inventory values?
+    explain: Data tampering violates integrity.
+    choices:
+      - Freshness only
+      - Integrity
+      - Confidentiality only
+      - Availability only
+    answer: 1
+    language: text
+
+  - question: Which statement about MAC vs signature is correct?
+    explain: MAC shared-key, signature asymmetric and publicly verifiable.
+    choices:
+      - MAC is publicly verifiable by anyone
+      - Signature requires shared secret between verifier and signer
+      - Signature supports third-party verifiability better than MAC
+      - MAC provides non-repudiation by default
+    answer: 2
+    language: text
+
+  - question: In TCP, receiving three duplicate ACKs indicates most likely...
+    explain: A segment lost but later segments arrived.
+    choices:
+      - Receiver crashed
+      - Isolated packet loss with continued delivery
+      - DNS timeout
+      - ECN disabled
+    answer: 1
+    language: text
+
+  - question: If all routers were always lightly loaded, QoS guarantees become less critical mainly because...
+    explain: Queueing delay/variability remain low.
+    choices:
+      - Propagation delay disappears
+      - Queueing issues are less severe most of time
+      - Packet headers get smaller
+      - Cryptography gets faster
+    answer: 1
+    language: text
+
+  - question: In DiffServ architecture, interior routers typically...
+    explain: Apply PHB based on DSCP; classification/policing at edge.
+    choices:
+      - Perform per-flow admission signaling globally
+      - Apply per-hop behaviors based on marked classes
+      - Negotiate TLS certificates
+      - Run Kerberos exchanges
+    answer: 1
+    language: text
+
+  - question: IntServ is associated with...
+    explain: Resource reservation signaling per flow (e.g., RSVP).
+    choices:
+      - Class-based aggregate treatment only
+      - Per-flow reservation approach
+      - No QoS objectives
+      - DNS-based prioritization
+    answer: 1
+    language: text
+
+  - question: Kerberos primarily relies on...
+    explain: Symmetric cryptography with trusted third party (KDC).
+    choices:
+      - Only public-key signatures
+      - KDC and symmetric tickets/session keys
+      - Blockchain consensus
+      - DNSSEC roots
+    answer: 1
+    language: text
+
+  - question: In TLS handshake, server proves possession of private key by...
+    explain: Signing/deriving handshake secrets proving key possession.
+    choices:
+      - Sending private key encrypted
+      - Handshake cryptographic proof (signature/key exchange)
+      - Publishing password hash
+      - Setting ECN bits
+    answer: 1
+    language: text
+
+  - question: Which is true about confidentiality and integrity?
+    explain: They are distinct; encryption alone may not ensure integrity.
+    choices:
+      - Confidentiality implies integrity automatically always
+      - Integrity implies confidentiality always
+      - They are different goals; often need separate mechanisms
+      - Neither matters with TCP
+    answer: 2
+    language: text
+
+  - question: In a default-deny firewall, newly required service access is enabled by...
+    explain: Add explicit allow rule(s) for intended traffic.
+    choices:
+      - Removing final drop and allowing all
+      - Adding explicit allow rule for that service
+      - Switching to hub topology
+      - Disabling routing
+    answer: 1
+    language: text
+
+  - question: Which field combination is most important to identify 5-tuple flow?
+    explain: src/dst IP, src/dst port, protocol.
+    choices:
+      - TTL, DSCP, checksum, MSS, window scale
+      - Source IP, destination IP, source port, destination port, protocol
+      - MAC addresses only
+      - DNS name and URL path
+    answer: 1
+    language: text
+
+  - question: What is the best strategy for exam prep on these topics?
+    explain: Practice concept + calculations + protocol reasoning and threat modeling.
+    choices:
+      - Memorize only port numbers
+      - Practice mixed conceptual and scenario-based questions
+      - Study only cryptography, ignore networking
+      - Focus only on historical trivia
+    answer: 1
+    language: text
