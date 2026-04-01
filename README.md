@@ -30,9 +30,9 @@ documenting the development process for this project.
 
 #### Notes
 
-[![Dependencies](https://img.shields.io/badge/dependencies-FTXUI%20%7C%20yaml--cpp%20%7C%20libssh-informational)](#credits)
+[![Dependencies](https://img.shields.io/badge/dependencies-FTXUI%20%7C%20yaml--cpp%20%7C%20libssh-informational)](#dependencies)
 [![SSH Compatible](https://img.shields.io/badge/SSH-compatible-brightgreen)](#ssh-server-mode)
-[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](#license)
 
 #### Version Control
 
