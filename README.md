@@ -21,18 +21,23 @@ documenting the development process for this project.
 > This way, you get to make fun of their... incredibly (lacking) _haskell_
 > knowledge for example!
 
-### Releases
+#### Releases
 
 [![AUR version](https://img.shields.io/aur/version/certamen)](https://aur.archlinux.org/packages/certamen)
-[![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=linux%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
-[![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=macOS%20compatible&color=success)](https://github.com/trintlermint/certamen/releases/latest)
+[![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=linux&color=success)](https://github.com/trintlermint/certamen/releases/latest)
+[![Release](https://img.shields.io/github/v/release/trintlermint/certamen?label=macOS&color=success)](https://github.com/trintlermint/certamen/releases/latest)
 [![Windows CI](https://img.shields.io/badge/windows-CI%20failing%20%28incompatible%29-red)](https://github.com/trintlermint/certamen/actions)
 
-### Notes
+#### Notes
 
 [![Dependencies](https://img.shields.io/badge/dependencies-FTXUI%20%7C%20yaml--cpp%20%7C%20libssh-informational)](#credits)
 [![SSH Compatible](https://img.shields.io/badge/SSH-compatible-brightgreen)](#ssh-server-mode)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+#### Version Control
+
+[![Codeberg](https://img.shields.io/badge/Codeberg-certamen-blue?logo=codeberg)](https://codeberg.org/trintlermint/certamen)
+[![GitHub](https://img.shields.io/badge/GitHub-certamen-181717?logo=github)](https://github.com/trintlermint/certamen)
 
 ### One might ask: I'm passing everything, why do I need this?
 
