@@ -1,6 +1,5 @@
 #include "screens/menu.hpp"
 #include "app.hpp"
-#include "banner.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -187,7 +186,6 @@ ftxui::Component make_menu_screen(AppState& state)
 
         Elements content;
         content.push_back(text(""));
-        content.push_back(render_banner());
         content.push_back(text(""));
         content.push_back(separator() | color(Color::GrayDark));
         content.push_back(text(""));

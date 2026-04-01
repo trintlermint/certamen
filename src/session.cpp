@@ -1,6 +1,5 @@
 #include "session.hpp"
 #include "app.hpp"
-#include "banner.hpp"
 #include "model.hpp"
 #include "screens/quiz.hpp"
 #include "screens/quiz_result.hpp"
@@ -50,7 +49,6 @@ static void run_name_prompt(std::string& player_name, ScreenInteractive& screen)
     auto renderer = Renderer(component, [&] {
         return vbox({
             text(""),
-            render_banner(),
             text(""),
             separator() | color(Color::GrayDark),
             text(""),
@@ -98,7 +96,6 @@ static int run_quiz_picker(const std::vector<std::string>& quiz_files,
     auto renderer = Renderer(component, [&, menu, entries] {
         return vbox({
             text(""),
-            render_banner(),
             text(" " + player_name) | dim | center,
             text(""),
             separator() | color(Color::GrayDark),
