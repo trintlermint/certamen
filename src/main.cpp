@@ -1,4 +1,5 @@
 #include "app.hpp"
+#include "cli.hpp"
 #include "serve.hpp"
 #include "session.hpp"
 #include "screens/menu.hpp"
@@ -33,10 +34,11 @@ static void print_help(const char* prog)
         << "CERTAMEN; Terminal quiz game engine\n"
         << "\n"
         << "USAGE\n"
-        << "  " << prog << "                           Start empty (load files from TUI or create one!)\n"
-        << "  " << prog << " <a.yaml b.yaml ...>           Load >1 quiz files\n"
-        << "  " << prog << " serve [options] <files>   Host an SSH quiz server\n"
-        << "  " << prog << " -h, --help                Show this help menu!\n"
+        << "  " << prog << "                               Start empty (load files from TUI or create one!)\n"
+        << "  " << prog << " <a.yaml b.yaml ...>           Load quiz files into the TUI\n"
+        << "  " << prog << " --cli [a.yaml ... n.yaml]     Run in CLI mode (no TUI required)\n"
+        << "  " << prog << " serve [options] <files>       Host an SSH quiz server\n"
+        << "  " << prog << " -h, --help                    Show this help menu\n"
         << "\n"
         << "LOCAL MODE\n"
         << "  Opens the executable regularly. Pass zero or more .yaml quiz files as stdin arguments.\n"
@@ -215,6 +217,14 @@ int main(int argc, char* argv[])
     }
 
     std::string first_arg = argv[1];
+
+    if (first_arg == "--cli")
+    {
+        std::vector<std::string> files;
+        for (int i = 2; i < argc; ++i)
+            files.push_back(argv[i]);
+        return run_cli(files);
+    }
 
     if (first_arg == "--session")
     {
