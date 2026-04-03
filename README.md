@@ -6,7 +6,7 @@
   <img src="assets/1.png" width="32%" alt="Demo 1">
   <img src="assets/2.png" width="32%" alt="Demo 2">
   <img src="assets/3.png" width="32%" alt="Demo 3">
-  </p>
+</p>
 
 A _Terminal User Interface_ **Quiz Game Engine** written entirely in C++.
 
@@ -56,10 +56,10 @@ documenting the development process for this project.
   - [Dependencies](#dependencies)
   - [CMake](#cmake)
   - [macOS and Windows](#macos-and-windows)
-  - [Manual compilation](#manual-compilation-cli)
 - [Usage](#usage)
   - [Offline user mode](#offline-user-mode)
   - [SSH server mode](#ssh-server-mode)
+  - [CLI mode](cli-mode)
 - [Setup](#setup)
   - [Quiz Format](#quiz-format)
   - [Templates](#templates)
@@ -194,20 +194,6 @@ cmake --build --preset release
 > or doesn't please inform me on Github Issues! See
 > [CONTRIBUTING.md](CONTRIBUTING.md)
 
-### Manual compilation (CLI)
-
-If yaml-cpp are installed system-wide and you want to skip CMake entirely, you
-can compile the CLI, the CLI is the previously, originally known "quizzer" app;
-faithfully renamed.
-
-```bash
-g++ -std=c++17 -Wall -Wextra -Wpedantic -O2 main.cpp -lyaml-cpp -o certamen
-```
-
-> [!NOTE]
-> This builds a local-only binary without the TUI or SSH server. Use the CMake
-> build for the included features.
-
 ---
 
 ## Usage
@@ -244,9 +230,6 @@ files you desire. This will then be loaded into the session, to manipulate them
 such as loading, unloading them, go to the "Load Quiz File" option. Here, you
 can Load new files, or get rid of them in the current session.
 
-> [!NOTE]
-> The same applies to the Server hosting the SSH!
-
 ### SSH server mode
 
 Host a quiz for others to connect to with any SSH client:
@@ -270,6 +253,15 @@ _isolated_ "quiz" session. The server logs scores per player.
 > [!IMPORTANT]
 > Full server shell documentation: **[SERVING.md](SERVING.md)**. Also, password
 > is currently having issues currently.
+
+### CLI mode
+
+The `certamen` executable bundles a plain-text CLI alongside the TUI:
+
+```bash
+./build/bin/certamen --cli quiz.yaml
+./build/bin/certamen --cli [a.yaml ... n.yaml]
+```
 
 ---
 
