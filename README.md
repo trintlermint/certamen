@@ -59,7 +59,7 @@ documenting the development process for this project.
 - [Usage](#usage)
   - [Offline user mode](#offline-user-mode)
   - [SSH server mode](#ssh-server-mode)
-  - [CLI mode](cli-mode)
+  - [CLI mode](#cli-mode)
 - [Setup](#setup)
   - [Quiz Format](#quiz-format)
   - [Templates](#templates)
