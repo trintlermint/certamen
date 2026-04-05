@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p certamen-linux-x64
           cp build/bin/certamen certamen-linux-x64/
-          cp example_quiz.yaml certamen-linux-x64/
+          cp templates/example_quiz.yaml certamen-linux-x64/
           tar -czf certamen-linux-x64.tar.gz certamen-linux-x64/
 
       - name: Upload artifact
@@ -63,7 +63,7 @@ jobs:
         run: |
           mkdir -p certamen-macos-x64
           cp build/bin/certamen certamen-macos-x64/
-          cp example_quiz.yaml certamen-macos-x64/
+          cp templates/example_quiz.yaml certamen-macos-x64/
           tar -czf certamen-macos-x64.tar.gz certamen-macos-x64/
 
       - name: Upload artifact
@@ -107,7 +107,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Path certamen-windows-x64 -Force | Out-Null
           Copy-Item build/bin/certamen.exe certamen-windows-x64/
-          Copy-Item example_quiz.yaml certamen-windows-x64/
+          Copy-Item templates/example_quiz.yaml certamen-windows-x64/
           Compress-Archive -Path certamen-windows-x64 -DestinationPath certamen-windows-x64.zip -Force
 
       - name: Upload artifact
