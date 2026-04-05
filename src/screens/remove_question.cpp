@@ -63,7 +63,7 @@ ftxui::Component make_remove_question_screen(AppState& state)
                     ? text(" [exp]") | color(Color::Yellow) | dim
                     : text(""),
             });
-            if (sel) entry = entry | color(Color::Cyan);
+            if (sel) entry = entry | color(Color::Cyan) | focus;
             body.push_back(entry);
         }
 

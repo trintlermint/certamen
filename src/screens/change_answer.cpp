@@ -81,7 +81,7 @@ ftxui::Component make_change_answer_screen(AppState& state)
                     text(q.question) | (sel ? bold : nothing),
                     text(answer_hint) | dim | color(Color::Green),
                 });
-                if (sel) entry = entry | color(Color::Cyan);
+                if (sel) entry = entry | color(Color::Cyan) | focus;
                 body.push_back(entry);
             }
 
@@ -120,7 +120,7 @@ ftxui::Component make_change_answer_screen(AppState& state)
                     paragraph(q.choices[i]) | flex | (is_new ? bold : nothing),
                     text(is_current ? "  (current)" : "") | dim,
                 });
-                if (is_new) choice_el = choice_el | color(Color::Cyan);
+                if (is_new) choice_el = choice_el | color(Color::Cyan) | focus;
                 else choice_el = choice_el | dim;
                 body.push_back(choice_el);
             }

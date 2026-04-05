@@ -185,7 +185,7 @@ ftxui::Component make_quiz_screen(AppState& state)
             else if (state.quiz_answered && selected && !state.quiz_was_correct)
                 choice_el = choice_el | color(Color::RedLight);
             else if (!state.quiz_answered && selected)
-                choice_el = choice_el | bold | color(Color::Cyan);
+                choice_el = choice_el | bold | color(Color::Cyan) | focus;
             else
                 choice_el = choice_el | dim;
 
