@@ -46,7 +46,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
                     ? text(" [exp]") | color(Color::Yellow) | dim
                     : text(""),
             });
-            if (selected) entry = entry | color(Color::Cyan);
+            if (selected) entry = entry | color(Color::Cyan) | focus;
             list_entries.push_back(entry);
         }
 
@@ -83,7 +83,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
             if (state.list_show_explain && q.explain && !q.explain->empty())
             {
                 detail.push_back(text(""));
-                detail.push_back(paragraph(" " + *q.explain) | dim);
+                detail.push_back(paragraph(" " + *q.explain) | color(Color::Yellow) | dim);
             }
         }
         else
