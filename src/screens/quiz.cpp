@@ -177,7 +177,7 @@ ftxui::Component make_quiz_screen(AppState& state)
             auto choice_el = hbox({
                 text(marker),
                 text(std::to_string(i + 1) + ". "),
-                text(q.choices[i]),
+                paragraph(q.choices[i]) | flex,
             });
 
             if (state.quiz_answered && is_correct)
@@ -199,7 +199,7 @@ ftxui::Component make_quiz_screen(AppState& state)
                 body.push_back(text(" Correct ") | color(Color::Green) | bold);
             else
                 body.push_back(
-                    text(" Incorrect  Answer: " + std::to_string(q.answer + 1) + ". " +
+                    paragraph(" Incorrect  Answer: " + std::to_string(q.answer + 1) + ". " +
                          q.choices[q.answer]) | color(Color::RedLight));
 
             if (q.explain && !q.explain->empty())

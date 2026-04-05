@@ -73,7 +73,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
                 bool correct = (static_cast<int>(j) == q.answer);
                 auto line = hbox({
                     text("  " + std::to_string(j + 1) + ". "),
-                    text(q.choices[j])
+                    paragraph(q.choices[j]) | flex
                         | (state.list_show_answers && correct ? color(Color::Green) : nothing),
                     text(state.list_show_answers && correct ? "  correct" : "") | dim,
                 });

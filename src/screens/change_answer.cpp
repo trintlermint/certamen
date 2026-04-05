@@ -117,7 +117,7 @@ ftxui::Component make_change_answer_screen(AppState& state)
                 auto choice_el = hbox({
                     text(is_new ? " > " : "   "),
                     text(std::to_string(i + 1) + ". "),
-                    text(q.choices[i]) | (is_new ? bold : nothing),
+                    paragraph(q.choices[i]) | flex | (is_new ? bold : nothing),
                     text(is_current ? "  (current)" : "") | dim,
                 });
                 if (is_new) choice_el = choice_el | color(Color::Cyan);

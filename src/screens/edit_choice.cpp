@@ -151,7 +151,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
                 auto choice_el = hbox({
                     text(sel ? " > " : "   "),
                     text(std::to_string(i + 1) + ". "),
-                    text(q.choices[i]) | (sel ? bold : nothing),
+                    paragraph(q.choices[i]) | flex | (sel ? bold : nothing),
                     text(is_answer ? "  (correct)" : "") | dim,
                 });
                 if (sel) choice_el = choice_el | color(Color::Cyan);
