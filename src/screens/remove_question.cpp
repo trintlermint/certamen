@@ -71,6 +71,6 @@ ftxui::Component make_remove_question_screen(AppState& state)
         body.push_back(separator() | color(Color::GrayDark));
         body.push_back(text(" j/k navigate  Enter remove  Esc back ") | dim | center);
 
-        return vbox(std::move(body)) | vscroll_indicator | frame | flex | borderRounded;
+        return vbox(std::move(body)) | vscroll_indicator | yframe | flex | borderRounded;
     });
 }

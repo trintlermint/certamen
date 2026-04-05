@@ -44,7 +44,7 @@ ftxui::Component make_quit_confirm_screen(AppState& state, ftxui::ScreenInteract
             body.push_back(text(" These changes will be lost:") | dim);
             body.push_back(text(""));
             auto diff_entries = render_diff_lines(state.diff_lines);
-            body.push_back(vbox(std::move(diff_entries)) | vscroll_indicator | frame | flex);
+            body.push_back(vbox(std::move(diff_entries)) | vscroll_indicator | yframe | flex);
         }
         else
         {

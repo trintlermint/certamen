@@ -274,7 +274,7 @@ ftxui::Component make_manual_screen(AppState& state)
         }
 
         auto content_panel = vbox(std::move(content_lines))
-            | vscroll_indicator | frame | flex;
+            | vscroll_indicator | yframe | flex;
 
         return vbox({
             text(""),

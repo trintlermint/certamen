@@ -140,13 +140,12 @@ ftxui::Component make_quiz_screen(AppState& state)
             text(" (" + format_pct(state.quiz_score, total) + ") ") | dim,
         });
 
-        Elements body;
-        // progress gaugeee!!!
         if (idx > 0)
         {
-            body.push_back(text(""));
-            body.push_back(gauge(progress) | color(Color::Cyan) | size(HEIGHT, EQUAL, 1));
+            header_lines.push_back(gauge(progress) | color(Color::Cyan) | size(HEIGHT, EQUAL, 1));
         }
+
+        Elements body;
         body.push_back(text(""));
         body.push_back(paragraph(" " + q.question) | bold);
 
@@ -178,7 +177,7 @@ ftxui::Component make_quiz_screen(AppState& state)
             auto choice_el = hbox({
                 text(marker),
                 text(std::to_string(i + 1) + ". "),
-                text(q.choices[i]),
+                paragraph(q.choices[i]) | flex,
             });
 
             if (state.quiz_answered && is_correct)
@@ -200,7 +199,7 @@ ftxui::Component make_quiz_screen(AppState& state)
                 body.push_back(text(" Correct ") | color(Color::Green) | bold);
             else
                 body.push_back(
-                    text(" Incorrect  Answer: " + std::to_string(q.answer + 1) + ". " +
+                    paragraph(" Incorrect  Answer: " + std::to_string(q.answer + 1) + ". " +
                          q.choices[q.answer]) | color(Color::RedLight));
 
             if (q.explain && !q.explain->empty())
@@ -225,7 +224,7 @@ ftxui::Component make_quiz_screen(AppState& state)
             outer.push_back(std::move(hl));
         outer.push_back(header);
         outer.push_back(separator() | color(Color::GrayDark));
-        outer.push_back(vbox(std::move(body)) | vscroll_indicator | frame | flex);
+        outer.push_back(vbox(std::move(body)) | vscroll_indicator | yframe | flex);
 
         return vbox(std::move(outer)) | borderRounded;
     });

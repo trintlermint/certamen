@@ -51,7 +51,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
         }
 
         auto list_panel = vbox(std::move(list_entries))
-            | vscroll_indicator | frame | flex;
+            | vscroll_indicator | yframe | flex;
 
         Elements detail;
         if (state.list_selected >= 0 &&
@@ -73,7 +73,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
                 bool correct = (static_cast<int>(j) == q.answer);
                 auto line = hbox({
                     text("  " + std::to_string(j + 1) + ". "),
-                    text(q.choices[j])
+                    paragraph(q.choices[j]) | flex
                         | (state.list_show_answers && correct ? color(Color::Green) : nothing),
                     text(state.list_show_answers && correct ? "  correct" : "") | dim,
                 });
@@ -92,7 +92,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
         }
 
         auto detail_panel = vbox(std::move(detail))
-            | vscroll_indicator | frame | flex
+            | vscroll_indicator | yframe | flex
             | size(HEIGHT, GREATER_THAN, 15);
 
         auto toggles_bar = hbox({
