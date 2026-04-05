@@ -197,6 +197,6 @@ ftxui::Component make_edit_choice_screen(AppState& state)
             }
         }
 
-        return vbox(std::move(body)) | vscroll_indicator | frame | flex | borderRounded;
+        return vbox(std::move(body)) | vscroll_indicator | yframe | flex | borderRounded;
     });
 }

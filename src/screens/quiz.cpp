@@ -224,7 +224,7 @@ ftxui::Component make_quiz_screen(AppState& state)
             outer.push_back(std::move(hl));
         outer.push_back(header);
         outer.push_back(separator() | color(Color::GrayDark));
-        outer.push_back(vbox(std::move(body)) | vscroll_indicator | frame | flex);
+        outer.push_back(vbox(std::move(body)) | vscroll_indicator | yframe | flex);
 
         return vbox(std::move(outer)) | borderRounded;
     });

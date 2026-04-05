@@ -47,7 +47,7 @@ ftxui::Component make_save_confirm_screen(AppState& state)
             text(""),
             text(" Changes:") | dim,
             text(""),
-            vbox(std::move(diff_entries)) | vscroll_indicator | frame | flex,
+            vbox(std::move(diff_entries)) | vscroll_indicator | yframe | flex,
             text(""),
             separator() | color(Color::GrayDark),
             text(""),

@@ -130,6 +130,6 @@ ftxui::Component make_change_answer_screen(AppState& state)
             body.push_back(text(" j/k navigate  Enter save  Esc back ") | dim | center);
         }
 
-        return vbox(std::move(body)) | vscroll_indicator | frame | flex | borderRounded;
+        return vbox(std::move(body)) | vscroll_indicator | yframe | flex | borderRounded;
     });
 }
