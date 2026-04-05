@@ -116,7 +116,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
                     text(std::to_string(i + 1) + ". ") | dim,
                     text(q.question) | (sel ? bold : nothing),
                 });
-                if (sel) entry = entry | color(Color::Cyan);
+                if (sel) entry = entry | color(Color::Cyan) | focus;
                 body.push_back(entry);
             }
 
@@ -154,7 +154,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
                     paragraph(q.choices[i]) | flex | (sel ? bold : nothing),
                     text(is_answer ? "  (correct)" : "") | dim,
                 });
-                if (sel) choice_el = choice_el | color(Color::Cyan);
+                if (sel) choice_el = choice_el | color(Color::Cyan) | focus;
                 else choice_el = choice_el | dim;
                 body.push_back(choice_el);
             }
