@@ -1,5 +1,6 @@
 #include "screens/quiz_setup.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
@@ -10,8 +11,12 @@ using namespace ftxui;
 ftxui::Component make_quiz_setup_screen(AppState& state)
 {
     auto focusable = Renderer([](bool) { return text(""); });
+    auto entry_boxes = make_entry_boxes();
 
-    auto component = CatchEvent(focusable, [&](Event event) {
+    auto component = CatchEvent(focusable, [&, entry_boxes](Event event) {
+        int clicked = mouse_click_index(event, entry_boxes);
+        if (clicked >= 0) { state.quiz_setup_cursor = clicked; return true; }
+
         if (event == Event::Escape)
         {
             state.return_to_menu();
@@ -118,7 +123,7 @@ ftxui::Component make_quiz_setup_screen(AppState& state)
         return false;
     });
 
-    return Renderer(component, [&] {
+    return Renderer(component, [&, entry_boxes] {
         int file_count = static_cast<int>(state.loaded_files.size());
 
         Elements body;
@@ -126,6 +131,8 @@ ftxui::Component make_quiz_setup_screen(AppState& state)
 
         if (state.quiz_setup_phase == 0)
         {
+            entry_boxes->resize(file_count);
+
             body.push_back(text(" Select Quiz Files ") | bold | center);
             body.push_back(text(""));
             body.push_back(separator() | color(Color::GrayDark));
@@ -150,7 +157,7 @@ ftxui::Component make_quiz_setup_screen(AppState& state)
                 });
                 if (sel) entry = entry | color(Color::Cyan);
                 if (!included) entry = entry | dim;
-                body.push_back(entry);
+                body.push_back(entry | reflect((*entry_boxes)[i]));
             }
 
             body.push_back(text(""));
@@ -160,12 +167,15 @@ ftxui::Component make_quiz_setup_screen(AppState& state)
         }
         else
         {
+            int order_count = static_cast<int>(state.quiz_file_order.size());
+            entry_boxes->resize(order_count);
+
             body.push_back(text(" Set Quiz Order ") | bold | center);
             body.push_back(text(""));
             body.push_back(separator() | color(Color::GrayDark));
             body.push_back(text(""));
 
-            for (int pos = 0; pos < static_cast<int>(state.quiz_file_order.size()); ++pos)
+            for (int pos = 0; pos < order_count; ++pos)
             {
                 bool sel = (pos == state.quiz_setup_cursor);
                 int fi = state.quiz_file_order[pos];
@@ -182,7 +192,7 @@ ftxui::Component make_quiz_setup_screen(AppState& state)
                     text("  " + std::to_string(qcount) + "q") | dim,
                 });
                 if (sel) entry = entry | color(Color::Cyan);
-                body.push_back(entry);
+                body.push_back(entry | reflect((*entry_boxes)[pos]));
             }
 
             body.push_back(text(""));

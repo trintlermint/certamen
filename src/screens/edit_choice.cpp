@@ -1,5 +1,6 @@
 #include "screens/edit_choice.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include "syntax.hpp"
 #include <ftxui/component/component.hpp>
@@ -10,6 +11,7 @@ using namespace ftxui;
 
 ftxui::Component make_edit_choice_screen(AppState& state)
 {
+    auto entry_boxes = make_entry_boxes();
     auto text_input = Input(&state.edit_choice_text, "Choice text...");
 
     auto save_btn = Button(" Save ", [&] {
@@ -35,8 +37,31 @@ ftxui::Component make_edit_choice_screen(AppState& state)
 
     auto inner = Container::Vertical({});
 
-    auto component = CatchEvent(inner, [&](Event event) {
+    auto component = CatchEvent(inner, [&, entry_boxes](Event event) {
         if (state.target_indices.empty()) return false;
+
+        if (state.edit_choice_phase != 2)
+        {
+            int clicked = mouse_click_index(event, entry_boxes);
+            if (clicked >= 0)
+            {
+                if (state.edit_choice_phase == 0)
+                {
+                    state.edit_choice_question_idx = clicked;
+                    state.edit_choice_phase = 1;
+                    state.edit_choice_choice_idx = 0;
+                }
+                else
+                {
+                    state.edit_choice_choice_idx = clicked;
+                    int real_idx = state.target_indices[state.edit_choice_question_idx];
+                    state.edit_choice_text = state.questions[real_idx].choices[clicked];
+                    state.edit_choice_phase = 2;
+                }
+                return true;
+            }
+        }
+
         if (state.edit_choice_phase == 2)
         {
             if (event == Event::Escape)
@@ -87,7 +112,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
     });
 
     return Renderer(component, [&, inner, focusable, edit_container,
-                                   text_input, save_btn, cancel_btn] {
+                                   text_input, save_btn, cancel_btn, entry_boxes] {
         inner->DetachAllChildren();
         if (state.edit_choice_phase == 2)
             inner->Add(edit_container);
@@ -101,13 +126,16 @@ ftxui::Component make_edit_choice_screen(AppState& state)
 
         if (state.edit_choice_phase == 0)
         {
+            int count = static_cast<int>(state.target_indices.size());
+            entry_boxes->resize(count);
+
             body.push_back(text(""));
             body.push_back(text(" Edit Choice ") | bold | center);
             body.push_back(text(""));
             body.push_back(separator() | color(Color::GrayDark));
             body.push_back(text(""));
 
-            for (int i = 0; i < static_cast<int>(state.target_indices.size()); ++i)
+            for (int i = 0; i < count; ++i)
             {
                 bool sel = (i == state.edit_choice_question_idx);
                 const auto& q = state.questions[state.target_indices[i]];
@@ -117,7 +145,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
                     text(q.question) | (sel ? bold : nothing),
                 });
                 if (sel) entry = entry | color(Color::Cyan) | focus;
-                body.push_back(entry);
+                body.push_back(entry | reflect((*entry_boxes)[i]));
             }
 
             body.push_back(text(""));
@@ -144,7 +172,9 @@ ftxui::Component make_edit_choice_screen(AppState& state)
 
             body.push_back(text(""));
 
-            for (int i = 0; i < static_cast<int>(q.choices.size()); ++i)
+            int num_choices = static_cast<int>(q.choices.size());
+            entry_boxes->resize(num_choices);
+            for (int i = 0; i < num_choices; ++i)
             {
                 bool sel = (i == state.edit_choice_choice_idx);
                 bool is_answer = (i == q.answer);
@@ -156,7 +186,7 @@ ftxui::Component make_edit_choice_screen(AppState& state)
                 });
                 if (sel) choice_el = choice_el | color(Color::Cyan) | focus;
                 else choice_el = choice_el | dim;
-                body.push_back(choice_el);
+                body.push_back(choice_el | reflect((*entry_boxes)[i]));
             }
 
             body.push_back(text(""));

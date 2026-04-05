@@ -1,5 +1,6 @@
 #include "screens/manual.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
@@ -209,10 +210,19 @@ static const std::vector<ManualSection>& get_sections()
 ftxui::Component make_manual_screen(AppState& state)
 {
     auto focusable = Renderer([](bool) { return text(""); });
+    auto entry_boxes = make_entry_boxes();
 
-    auto component = CatchEvent(focusable, [&](Event event) {
+    auto component = CatchEvent(focusable, [&, entry_boxes](Event event) {
         const auto& sections = get_sections();
         int topic_count = static_cast<int>(sections.size());
+
+        int clicked = mouse_click_index(event, entry_boxes);
+        if (clicked >= 0)
+        {
+            state.manual_topic = clicked;
+            state.manual_scroll = 0;
+            return true;
+        }
 
         if (nav_up_down(event, state.manual_topic, topic_count))
         {
@@ -231,20 +241,22 @@ ftxui::Component make_manual_screen(AppState& state)
         return false;
     });
 
-    return Renderer(component, [&] {
+    return Renderer(component, [&, entry_boxes] {
         const auto& sections = get_sections();
 
         // left panel: topic list
+        int topic_count = static_cast<int>(sections.size());
+        entry_boxes->resize(topic_count);
         Elements toc_entries;
-        for (int i = 0; i < static_cast<int>(sections.size()); ++i)
+        for (int i = 0; i < topic_count; ++i)
         {
             bool sel = (i == state.manual_topic);
             auto entry = hbox({
                 text(sel ? " > " : "   "),
                 text(sections[i].title) | (sel ? bold : nothing),
             });
-            if (sel) entry = entry | color(Color::Cyan);
-            toc_entries.push_back(entry);
+            if (sel) entry = entry | color(Color::Cyan) | focus;
+            toc_entries.push_back(entry | reflect((*entry_boxes)[i]));
         }
 
         auto toc_panel = vbox({

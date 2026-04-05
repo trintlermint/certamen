@@ -1,5 +1,6 @@
 #include "screens/change_answer.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include "syntax.hpp"
 #include <ftxui/component/component.hpp>
@@ -10,8 +11,31 @@ using namespace ftxui;
 
 ftxui::Component make_change_answer_screen(AppState& state)
 {
-    auto component = CatchEvent(Renderer([](bool) { return text(""); }), [&](Event event) {
+    auto entry_boxes = make_entry_boxes();
+
+    auto component = CatchEvent(Renderer([](bool) { return text(""); }), [&, entry_boxes](Event event) {
         if (state.target_indices.empty()) return false;
+
+        int clicked = mouse_click_index(event, entry_boxes);
+        if (clicked >= 0)
+        {
+            if (state.change_answer_phase == 0)
+            {
+                state.select_question_idx = clicked;
+                int real_idx = state.target_indices[clicked];
+                state.change_answer_phase = 1;
+                state.select_new_answer = state.questions[real_idx].answer;
+            }
+            else
+            {
+                state.select_new_answer = clicked;
+                int real_idx = state.target_indices[state.select_question_idx];
+                state.questions[real_idx].answer = state.select_new_answer;
+                state.status_message = "Answer updated.";
+                state.change_answer_phase = 0;
+            }
+            return true;
+        }
 
         if (state.change_answer_phase == 0)
         {
@@ -54,7 +78,7 @@ ftxui::Component make_change_answer_screen(AppState& state)
         return false;
     });
 
-    return Renderer(component, [&] {
+    return Renderer(component, [&, entry_boxes] {
         if (state.target_indices.empty())
             return text(" No questions for this file. ") | center | borderRounded;
 
@@ -62,13 +86,16 @@ ftxui::Component make_change_answer_screen(AppState& state)
 
         if (state.change_answer_phase == 0)
         {
+            int count = static_cast<int>(state.target_indices.size());
+            entry_boxes->resize(count);
+
             body.push_back(text(""));
             body.push_back(text(" Change Answer ") | bold | center);
             body.push_back(text(""));
             body.push_back(separator() | color(Color::GrayDark));
             body.push_back(text(""));
 
-            for (int i = 0; i < static_cast<int>(state.target_indices.size()); ++i)
+            for (int i = 0; i < count; ++i)
             {
                 bool sel = (i == state.select_question_idx);
                 const auto& q = state.questions[state.target_indices[i]];
@@ -82,7 +109,7 @@ ftxui::Component make_change_answer_screen(AppState& state)
                     text(answer_hint) | dim | color(Color::Green),
                 });
                 if (sel) entry = entry | color(Color::Cyan) | focus;
-                body.push_back(entry);
+                body.push_back(entry | reflect((*entry_boxes)[i]));
             }
 
             body.push_back(text(""));
@@ -109,7 +136,9 @@ ftxui::Component make_change_answer_screen(AppState& state)
 
             body.push_back(text(""));
 
-            for (int i = 0; i < static_cast<int>(q.choices.size()); ++i)
+            int num_choices = static_cast<int>(q.choices.size());
+            entry_boxes->resize(num_choices);
+            for (int i = 0; i < num_choices; ++i)
             {
                 bool is_current = (i == q.answer);
                 bool is_new = (i == state.select_new_answer);
@@ -122,7 +151,7 @@ ftxui::Component make_change_answer_screen(AppState& state)
                 });
                 if (is_new) choice_el = choice_el | color(Color::Cyan) | focus;
                 else choice_el = choice_el | dim;
-                body.push_back(choice_el);
+                body.push_back(choice_el | reflect((*entry_boxes)[i]));
             }
 
             body.push_back(text(""));
