@@ -1,5 +1,6 @@
 #include "screens/list_questions.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include "syntax.hpp"
 #include <ftxui/component/component.hpp>
@@ -15,11 +16,16 @@ ftxui::Component make_list_questions_screen(AppState& state)
     auto explain_toggle = Checkbox(" Explain", &state.list_show_explain);
 
     auto controls = Container::Horizontal({answer_toggle, code_toggle, explain_toggle});
+    auto entry_boxes = make_entry_boxes();
 
     auto component = Container::Vertical({controls});
 
-    component |= CatchEvent([&](Event event) {
+    component |= CatchEvent([&, entry_boxes](Event event) {
         int count = static_cast<int>(state.target_indices.size());
+
+        int clicked = mouse_click_index(event, entry_boxes);
+        if (clicked >= 0) { state.list_selected = clicked; return true; }
+
         if (nav_up_down(event, state.list_selected, count)) return true;
         if (event == Event::Character('b') || event == Event::Escape)
         {
@@ -29,9 +35,12 @@ ftxui::Component make_list_questions_screen(AppState& state)
         return false;
     });
 
-    return Renderer(component, [&, answer_toggle, code_toggle, explain_toggle] {
+    return Renderer(component, [&, answer_toggle, code_toggle, explain_toggle, entry_boxes] {
+        int count = static_cast<int>(state.target_indices.size());
+        entry_boxes->resize(count);
+
         Elements list_entries;
-        for (int i = 0; i < static_cast<int>(state.target_indices.size()); ++i)
+        for (int i = 0; i < count; ++i)
         {
             bool selected = (i == state.list_selected);
             const auto& q = state.questions[state.target_indices[i]];
@@ -47,7 +56,7 @@ ftxui::Component make_list_questions_screen(AppState& state)
                     : text(""),
             });
             if (selected) entry = entry | color(Color::Cyan) | focus;
-            list_entries.push_back(entry);
+            list_entries.push_back(entry | reflect((*entry_boxes)[i]));
         }
 
         auto list_panel = vbox(std::move(list_entries))

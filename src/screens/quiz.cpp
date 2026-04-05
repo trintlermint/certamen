@@ -1,5 +1,6 @@
 #include "screens/quiz.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include "syntax.hpp"
 #include <ftxui/component/component.hpp>
@@ -22,8 +23,9 @@ static std::string format_pct(int correct, int total)
 ftxui::Component make_quiz_screen(AppState& state)
 {
     auto focusable = Renderer([](bool) { return text(""); });
+    auto choice_boxes = make_entry_boxes();
 
-    auto component = CatchEvent(focusable, [&](Event event) {
+    auto component = CatchEvent(focusable, [&, choice_boxes](Event event) {
         if (state.quiz_session.empty()) return false;
 
         if (state.quiz_quit_pending)
@@ -47,6 +49,28 @@ ftxui::Component make_quiz_screen(AppState& state)
 
         const auto& q = state.quiz_session[idx];
         int num_choices = static_cast<int>(q.choices.size());
+
+        int clicked = mouse_click_index(event, choice_boxes);
+        if (clicked >= 0)
+        {
+            if (!state.quiz_answered)
+            {
+                state.quiz_selected = clicked;
+                state.quiz_answered = true;
+                state.quiz_was_correct = (clicked == q.answer);
+                if (state.quiz_was_correct) ++state.quiz_score;
+            }
+            else
+            {
+                state.quiz_index++;
+                state.quiz_selected = 0;
+                state.quiz_answered = false;
+                state.quiz_was_correct = false;
+                if (state.quiz_index >= static_cast<int>(state.quiz_session.size()))
+                    state.current_screen = AppScreen::QUIZ_RESULT;
+            }
+            return true;
+        }
 
         if (!state.quiz_answered)
         {
@@ -83,7 +107,7 @@ ftxui::Component make_quiz_screen(AppState& state)
         return false;
     });
 
-    return Renderer(component, [&] {
+    return Renderer(component, [&, choice_boxes] {
         if (state.quiz_quit_pending)
         {
             return vbox({
@@ -157,6 +181,7 @@ ftxui::Component make_quiz_screen(AppState& state)
 
         body.push_back(text(""));
 
+        choice_boxes->resize(q.choices.size());
         for (int i = 0; i < static_cast<int>(q.choices.size()); ++i)
         {
             bool selected = (i == state.quiz_selected);
@@ -189,7 +214,7 @@ ftxui::Component make_quiz_screen(AppState& state)
             else
                 choice_el = choice_el | dim;
 
-            body.push_back(choice_el);
+            body.push_back(choice_el | reflect((*choice_boxes)[i]));
         }
 
         if (state.quiz_answered)

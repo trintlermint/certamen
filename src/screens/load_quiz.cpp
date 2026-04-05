@@ -1,5 +1,6 @@
 #include "screens/load_quiz.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
@@ -28,14 +29,26 @@ ftxui::Component make_load_quiz_screen(AppState& state)
     auto action_row = Container::Horizontal({load_btn, done_btn});
     auto input_area = Container::Vertical({path_input, action_row});
     auto focusable = Renderer([](bool) { return text(""); });
+    auto entry_boxes = make_entry_boxes();
 
-    auto inner = Container::Vertical({});
+    auto tab = Container::Tab({focusable, input_area}, &state.load_screen_mode);
 
-    auto component = CatchEvent(inner, [&](Event event) {
+    auto component = CatchEvent(tab, [&, entry_boxes](Event event) {
         if (event == Event::Escape)
         {
             state.return_to_menu();
             return true;
+        }
+
+        if (!state.loaded_files.empty())
+        {
+            int clicked = mouse_click_index(event, entry_boxes);
+            if (clicked >= 0)
+            {
+                state.load_screen_mode = 0;
+                state.load_screen_selected = clicked;
+                return true;
+            }
         }
 
         if (event == Event::Tab)
@@ -67,13 +80,9 @@ ftxui::Component make_load_quiz_screen(AppState& state)
         return false;
     });
 
-    return Renderer(component, [&, inner, focusable, input_area,
-                                   path_input, load_btn, done_btn] {
-        inner->DetachAllChildren();
-        if (state.load_screen_mode == 0 && !state.loaded_files.empty())
-            inner->Add(focusable);
-        else
-            inner->Add(input_area);
+    return Renderer(component, [&, path_input, load_btn, done_btn, entry_boxes] {
+        if (state.loaded_files.empty())
+            state.load_screen_mode = 1;
 
         Elements body;
         body.push_back(text(""));
@@ -87,7 +96,9 @@ ftxui::Component make_load_quiz_screen(AppState& state)
             body.push_back(text(" Loaded files:") | dim);
             body.push_back(text(""));
 
-            for (int i = 0; i < static_cast<int>(state.loaded_files.size()); ++i)
+            int file_count = static_cast<int>(state.loaded_files.size());
+            entry_boxes->resize(file_count);
+            for (int i = 0; i < file_count; ++i)
             {
                 bool sel = (state.load_screen_mode == 0 && i == state.load_screen_selected);
                 const auto& lf = state.loaded_files[i];
@@ -104,7 +115,7 @@ ftxui::Component make_load_quiz_screen(AppState& state)
                     sel ? (text("  unload →") | color(Color::RedLight)) : text(""),
                 });
                 if (sel) entry = entry | color(Color::Cyan);
-                body.push_back(entry);
+                body.push_back(entry | reflect((*entry_boxes)[i]));
             }
 
             body.push_back(text(""));

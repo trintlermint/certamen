@@ -1,5 +1,6 @@
 #include "screens/remove_question.hpp"
 #include "app.hpp"
+#include "list_entry.hpp"
 #include "nav.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
@@ -9,9 +10,15 @@ using namespace ftxui;
 
 ftxui::Component make_remove_question_screen(AppState& state)
 {
-    auto component = CatchEvent(Renderer([](bool) { return text(""); }), [&](Event event) {
+    auto entry_boxes = make_entry_boxes();
+
+    auto component = CatchEvent(Renderer([](bool) { return text(""); }), [&, entry_boxes](Event event) {
         if (state.target_indices.empty()) return false;
         int count = static_cast<int>(state.target_indices.size());
+
+        int clicked = mouse_click_index(event, entry_boxes);
+        if (clicked >= 0) { state.remove_question_idx = clicked; return true; }
+
         if (nav_up_down(event, state.remove_question_idx, count)) return true;
         if (nav_numeric(event, state.remove_question_idx, count)) return true;
         if (event == Event::Return)
@@ -37,9 +44,12 @@ ftxui::Component make_remove_question_screen(AppState& state)
         return false;
     });
 
-    return Renderer(component, [&] {
+    return Renderer(component, [&, entry_boxes] {
         if (state.target_indices.empty())
             return text(" No questions for this file. ") | center | borderRounded;
+
+        int count = static_cast<int>(state.target_indices.size());
+        entry_boxes->resize(count);
 
         Elements body;
         body.push_back(text(""));
@@ -48,7 +58,7 @@ ftxui::Component make_remove_question_screen(AppState& state)
         body.push_back(separator() | color(Color::GrayDark));
         body.push_back(text(""));
 
-        for (int i = 0; i < static_cast<int>(state.target_indices.size()); ++i)
+        for (int i = 0; i < count; ++i)
         {
             bool sel = (i == state.remove_question_idx);
             const auto& q = state.questions[state.target_indices[i]];
@@ -64,7 +74,7 @@ ftxui::Component make_remove_question_screen(AppState& state)
                     : text(""),
             });
             if (sel) entry = entry | color(Color::Cyan) | focus;
-            body.push_back(entry);
+            body.push_back(entry | reflect((*entry_boxes)[i]));
         }
 
         body.push_back(text(""));
