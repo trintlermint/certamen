@@ -21,6 +21,12 @@ documenting the development process for this project.
 > This way, you get to make fun of their... incredibly (lacking) _haskell_
 > knowledge for example!
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://brainmade.org/white-logo.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://brainmade.org/black-logo.png">
+  <img alt="Brainmade logo" src="https://brainmade.org/black-logo.png">
+</picture>
+
 #### Releases
 
 [![AUR version](https://img.shields.io/aur/version/certamen)](https://aur.archlinux.org/packages/certamen)
@@ -390,5 +396,4 @@ thank you [Wikipedia](https://en.wikipedia.org/wiki/Certamen).
 
 ## License
 
-[<img src="./assets/brainmade-org.png" alt="brainmade.org">](https://brainmade.org)
 MIT; See [LICENSE.md](LICENSE). Copyright 2026 Niladri Adhikary.
