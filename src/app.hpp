@@ -3,6 +3,7 @@
 
 #include "model.hpp"
 #include <array>
+#include <filesystem>
 #include <vector>
 #include <string>
 #include <random>
@@ -30,6 +31,7 @@ enum class AppScreen
 struct LoadedFile
 {
     std::string filename;
+    std::string canonical_path;
     std::string name;
     std::string author;
     std::vector<Question> saved_questions;
@@ -194,8 +196,12 @@ struct AppState
 
     bool load_file(const std::string& path)
     {
+        std::string canon;
+        try { canon = std::filesystem::canonical(path).string(); }
+        catch (...) { canon = std::filesystem::absolute(path).string(); }
+
         for (const auto& lf : loaded_files)
-            if (lf.filename == path)
+            if (lf.canonical_path == canon)
             {
                 status_message = "Already loaded: " + path;
                 return false;
@@ -208,7 +214,8 @@ struct AppState
             int num_loaded = static_cast<int>(quiz.questions.size());
 
             LoadedFile lf;
-            lf.filename     = path;
+            lf.filename       = path;
+            lf.canonical_path = canon;
             lf.name         = quiz.name;
             lf.author       = quiz.author;
             lf.saved_name   = quiz.name;
