@@ -140,13 +140,12 @@ ftxui::Component make_quiz_screen(AppState& state)
             text(" (" + format_pct(state.quiz_score, total) + ") ") | dim,
         });
 
-        Elements body;
-        // progress gaugeee!!!
         if (idx > 0)
         {
-            body.push_back(text(""));
-            body.push_back(gauge(progress) | color(Color::Cyan) | size(HEIGHT, EQUAL, 1));
+            header_lines.push_back(gauge(progress) | color(Color::Cyan) | size(HEIGHT, EQUAL, 1));
         }
+
+        Elements body;
         body.push_back(text(""));
         body.push_back(paragraph(" " + q.question) | bold);
 
