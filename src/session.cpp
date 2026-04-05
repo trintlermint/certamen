@@ -1,6 +1,5 @@
 #include "session.hpp"
 #include "app.hpp"
-#include "banner.hpp"
 #include "model.hpp"
 #include "screens/quiz.hpp"
 #include "screens/quiz_result.hpp"
@@ -50,7 +49,7 @@ static void run_name_prompt(std::string& player_name, ScreenInteractive& screen)
     auto renderer = Renderer(component, [&] {
         return vbox({
             text(""),
-            render_banner(),
+            text(" CERTAMEN ") | bold | center,
             text(""),
             separator() | color(Color::GrayDark),
             text(""),
@@ -75,7 +74,7 @@ static int run_quiz_picker(const std::vector<std::string>& quiz_files,
 
     auto entries = std::make_shared<std::vector<std::string>>();
     for (const auto& f : quiz_files)
-        entries->push_back("  " + std::filesystem::path(f).stem().string());
+        entries->push_back(std::filesystem::path(f).stem().string());
 
     auto menu = Menu(entries.get(), &selected);
     auto component = Container::Vertical({menu});
@@ -98,12 +97,12 @@ static int run_quiz_picker(const std::vector<std::string>& quiz_files,
     auto renderer = Renderer(component, [&, menu, entries] {
         return vbox({
             text(""),
-            render_banner(),
+            text(" CERTAMEN ") | bold | center,
             text(" " + player_name) | dim | center,
             text(""),
             separator() | color(Color::GrayDark),
             text(""),
-            menu->Render() | vscroll_indicator | frame | flex,
+            menu->Render() | vscroll_indicator | frame | flex | center,
             text(""),
             separator() | color(Color::GrayDark),
             text(" Enter start  q disconnect ") | dim | center,
