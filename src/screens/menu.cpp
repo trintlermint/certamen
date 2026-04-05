@@ -128,20 +128,35 @@ ftxui::Component make_menu_screen(AppState& state)
         }
     };
 
+    auto menu_box = std::make_shared<std::vector<Box>>(entries.size());
     auto option = MenuOption::Vertical();
-    option.entries_option.transform = [](EntryState es) {
+    option.entries_option.transform = [menu_box](EntryState es) {
         auto label = text(es.label) | center;
         if (es.focused)
             label = label | bold;
         if (es.active)
             label = label | inverted;
+        if (es.index < static_cast<int>(menu_box->size()))
+            label = label | reflect((*menu_box)[es.index]);
         return label;
     };
     option.on_enter = activate_menu;
     auto menu = Menu(&entries, &state.menu_selected, option);
     auto component = Container::Vertical({menu});
 
-    component |= CatchEvent([&, activate_menu](Event event) {
+    component |= CatchEvent([&, activate_menu, menu_box](Event event) {
+        if (event.is_mouse() && event.mouse().button == Mouse::Left &&
+            event.mouse().motion == Mouse::Pressed)
+        {
+            for (int i = 0; i < static_cast<int>(menu_box->size()); ++i)
+                if ((*menu_box)[i].Contain(event.mouse().x, event.mouse().y))
+                {
+                    state.menu_selected = i;
+                    activate_menu();
+                    return true;
+                }
+        }
+
         if (event == Event::Character('0'))
         {
             state.manual_topic = 0;
