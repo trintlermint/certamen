@@ -199,7 +199,7 @@ ftxui::Component make_menu_screen(AppState& state)
         content.push_back(text(""));
         content.push_back(separator() | color(Color::GrayDark));
         content.push_back(text(""));
-        content.push_back(menu->Render() | vscroll_indicator | frame | flex | center);
+        content.push_back(menu->Render() | vscroll_indicator | frame | flex);
         content.push_back(text(""));
         content.push_back(separator() | color(Color::GrayDark));
         content.push_back(info_bar);
