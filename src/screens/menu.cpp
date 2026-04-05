@@ -21,6 +21,113 @@ ftxui::Component make_menu_screen(AppState& state)
         "Manual",
     };
 
+    auto activate_menu = [&] {
+        switch (state.menu_selected)
+        {
+            case 0:
+                if (state.questions.empty())
+                {
+                    state.status_message = "No questions loaded.";
+                }
+                else if (state.loaded_files.size() <= 1)
+                {
+                    state.start_quiz();
+                }
+                else
+                {
+                    state.quiz_setup_phase = 0;
+                    state.quiz_setup_cursor = 0;
+                    state.quiz_file_included.assign(state.loaded_files.size(), true);
+                    state.quiz_file_order.clear();
+                    state.current_screen = AppScreen::QUIZ_SETUP;
+                }
+                break;
+            case 1:
+                state.reset_add_form();
+                state.current_screen = state.route_to(AppScreen::ADD_QUESTION);
+                break;
+            case 2:
+                if (state.questions.empty())
+                    state.status_message = "No questions to remove.";
+                else
+                {
+                    state.remove_question_idx = 0;
+                    state.current_screen = state.route_to(AppScreen::REMOVE_QUESTION);
+                }
+                break;
+            case 3:
+                if (state.questions.empty())
+                    state.status_message = "No questions available.";
+                else
+                {
+                    state.select_question_idx = 0;
+                    state.select_new_answer = 0;
+                    state.change_answer_phase = 0;
+                    state.current_screen = state.route_to(AppScreen::CHANGE_ANSWER);
+                }
+                break;
+            case 4:
+                if (state.questions.empty())
+                    state.status_message = "No questions available.";
+                else
+                {
+                    state.edit_choice_question_idx = 0;
+                    state.edit_choice_choice_idx = 0;
+                    state.edit_choice_phase = 0;
+                    state.current_screen = state.route_to(AppScreen::EDIT_CHOICE);
+                }
+                break;
+            case 5:
+                if (state.questions.empty())
+                    state.status_message = "No questions available.";
+                else
+                {
+                    state.list_selected = 0;
+                    state.current_screen = state.route_to(AppScreen::LIST_QUESTIONS);
+                }
+                break;
+            case 6:
+            {
+                state.current_screen = state.route_to(AppScreen::SET_METADATA);
+                if (state.current_screen == AppScreen::SET_METADATA)
+                {
+                    if (state.target_file >= 0 && state.target_file < static_cast<int>(state.loaded_files.size()))
+                    {
+                        auto& lf = state.loaded_files[state.target_file];
+                        state.meta_name_text = lf.name;
+                        state.meta_author_text = lf.author;
+                    }
+                    else
+                    {
+                        state.meta_name_text = state.quiz_name;
+                        state.meta_author_text = state.quiz_author;
+                    }
+                }
+                break;
+            }
+            case 7:
+                if (state.loaded_files.empty())
+                {
+                    state.status_message = "No file loaded to save.";
+                    break;
+                }
+                state.current_screen = state.route_to(AppScreen::SAVE_CONFIRM);
+                if (state.current_screen == AppScreen::SAVE_CONFIRM)
+                    state.compute_diff(state.target_file);
+                break;
+            case 8:
+                state.load_path_text.clear();
+                state.load_screen_mode = 1;
+                state.current_screen = AppScreen::LOAD_QUIZ;
+                break;
+            case 9:
+                state.manual_topic = 0;
+                state.manual_scroll = 0;
+                state.current_screen = AppScreen::MANUAL;
+                break;
+        }
+    };
+
     auto option = MenuOption::Vertical();
     option.entries_option.transform = [](EntryState es) {
         auto label = text(es.label) | center;
@@ -30,10 +137,11 @@ ftxui::Component make_menu_screen(AppState& state)
             label = label | inverted;
         return label;
     };
+    option.on_enter = activate_menu;
     auto menu = Menu(&entries, &state.menu_selected, option);
     auto component = Container::Vertical({menu});
 
-    component |= CatchEvent([&](Event event) {
+    component |= CatchEvent([&, activate_menu](Event event) {
         if (event == Event::Character('0'))
         {
             state.manual_topic = 0;
@@ -54,110 +162,8 @@ ftxui::Component make_menu_screen(AppState& state)
         if (event == Event::Return ||
             (event.is_character() && event.character()[0] >= '1' && event.character()[0] <= '9'))
         {
-            switch (state.menu_selected)
-            {
-                case 0:
-                    if (state.questions.empty())
-                    {
-                        state.status_message = "No questions loaded.";
-                    }
-                    else if (state.loaded_files.size() <= 1)
-                    {
-                        state.start_quiz();
-                    }
-                    else
-                    {
-                        state.quiz_setup_phase = 0;
-                        state.quiz_setup_cursor = 0;
-                        state.quiz_file_included.assign(state.loaded_files.size(), true);
-                        state.quiz_file_order.clear();
-                        state.current_screen = AppScreen::QUIZ_SETUP;
-                    }
-                    return true;
-                case 1:
-                    state.reset_add_form();
-                    state.current_screen = state.route_to(AppScreen::ADD_QUESTION);
-                    return true;
-                case 2:
-                    if (state.questions.empty())
-                        state.status_message = "No questions to remove.";
-                    else
-                    {
-                        state.remove_question_idx = 0;
-                        state.current_screen = state.route_to(AppScreen::REMOVE_QUESTION);
-                    }
-                    return true;
-                case 3:
-                    if (state.questions.empty())
-                        state.status_message = "No questions available.";
-                    else
-                    {
-                        state.select_question_idx = 0;
-                        state.select_new_answer = 0;
-                        state.change_answer_phase = 0;
-                        state.current_screen = state.route_to(AppScreen::CHANGE_ANSWER);
-                    }
-                    return true;
-                case 4:
-                    if (state.questions.empty())
-                        state.status_message = "No questions available.";
-                    else
-                    {
-                        state.edit_choice_question_idx = 0;
-                        state.edit_choice_choice_idx = 0;
-                        state.edit_choice_phase = 0;
-                        state.current_screen = state.route_to(AppScreen::EDIT_CHOICE);
-                    }
-                    return true;
-                case 5:
-                    if (state.questions.empty())
-                        state.status_message = "No questions available.";
-                    else
-                    {
-                        state.list_selected = 0;
-                        state.current_screen = state.route_to(AppScreen::LIST_QUESTIONS);
-                    }
-                    return true;
-                case 6:
-                {
-                    state.current_screen = state.route_to(AppScreen::SET_METADATA);
-                    if (state.current_screen == AppScreen::SET_METADATA)
-                    {
-                        if (state.target_file >= 0 && state.target_file < static_cast<int>(state.loaded_files.size()))
-                        {
-                            auto& lf = state.loaded_files[state.target_file];
-                            state.meta_name_text = lf.name;
-                            state.meta_author_text = lf.author;
-                        }
-                        else
-                        {
-                            state.meta_name_text = state.quiz_name;
-                            state.meta_author_text = state.quiz_author;
-                        }
-                    }
-                    return true;
-                }
-                case 7:
-                    if (state.loaded_files.empty())
-                    {
-                        state.status_message = "No file loaded to save.";
-                        return true;
-                    }
-                    state.current_screen = state.route_to(AppScreen::SAVE_CONFIRM);
-                    if (state.current_screen == AppScreen::SAVE_CONFIRM)
-                        state.compute_diff(state.target_file);
-                    return true;
-                case 8:
-                    state.load_path_text.clear();
-                    state.load_screen_mode = 1;
-                    state.current_screen = AppScreen::LOAD_QUIZ;
-                    return true;
-                case 9:
-                    state.manual_topic = 0;
-                    state.manual_scroll = 0;
-                    state.current_screen = AppScreen::MANUAL;
-                    return true;
-            }
+            activate_menu();
+            return true;
         }
         return false;
     });
