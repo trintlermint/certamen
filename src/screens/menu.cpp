@@ -1,6 +1,5 @@
 #include "screens/menu.hpp"
 #include "app.hpp"
-#include "banner.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/event.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -10,16 +9,16 @@ using namespace ftxui;
 ftxui::Component make_menu_screen(AppState& state)
 {
     static const std::vector<std::string> entries = {
-        "  Take Quiz",
-        "  Add Question",
-        "  Remove Question",
-        "  Change Answer",
-        "  Edit Choice",
-        "  List Questions",
-        "  Set Author and Name",
-        "  Save",
-        "  Load Quiz File",
-        "  Manual",
+        "Take Quiz",
+        "Add Question",
+        "Remove Question",
+        "Change Answer",
+        "Edit Choice",
+        "List Questions",
+        "Set Author and Name",
+        "Save",
+        "Load Quiz File",
+        "Manual",
     };
 
     auto menu = Menu(&entries, &state.menu_selected);
@@ -187,11 +186,11 @@ ftxui::Component make_menu_screen(AppState& state)
 
         Elements content;
         content.push_back(text(""));
-        content.push_back(render_banner());
+        content.push_back(text(" CERTAMEN ") | bold | center);
         content.push_back(text(""));
         content.push_back(separator() | color(Color::GrayDark));
         content.push_back(text(""));
-        content.push_back(menu->Render() | vscroll_indicator | frame | flex);
+        content.push_back(menu->Render() | vscroll_indicator | frame | flex | center);
         content.push_back(text(""));
         content.push_back(separator() | color(Color::GrayDark));
         content.push_back(info_bar);
