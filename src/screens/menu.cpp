@@ -21,7 +21,16 @@ ftxui::Component make_menu_screen(AppState& state)
         "Manual",
     };
 
-    auto menu = Menu(&entries, &state.menu_selected);
+    auto option = MenuOption::Vertical();
+    option.entries_option.transform = [](EntryState es) {
+        auto label = text(es.label) | center;
+        if (es.focused)
+            label = label | bold;
+        if (es.active)
+            label = label | inverted;
+        return label;
+    };
+    auto menu = Menu(&entries, &state.menu_selected, option);
     auto component = Container::Vertical({menu});
 
     component |= CatchEvent([&](Event event) {
