@@ -30,6 +30,7 @@ struct QuizFile
 {
     std::string name;
     std::string author;
+    std::optional<int> default_answer;
     std::vector<Question> questions;
 };
 

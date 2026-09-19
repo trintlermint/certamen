@@ -42,7 +42,7 @@ struct LoadedFile
 struct AppState
 {
     std::vector<Question> questions;
-    bool randomise = false;
+    bool randomise = true;
     std::string status_message;
     std::string quiz_name;
     std::string quiz_author;

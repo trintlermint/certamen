@@ -14,7 +14,7 @@ std::optional<std::string> validate_question(const Question& q)
     return std::nullopt;
 }
 
-static std::vector<Question> parse_question_sequence(const YAML::Node& seq)
+static std::vector<Question> parse_question_sequence(const std::optional<int>& default_answer, const YAML::Node& seq)
 {
     std::vector<Question> questions;
     questions.reserve(seq.size());
@@ -35,11 +35,11 @@ static std::vector<Question> parse_question_sequence(const YAML::Node& seq)
         const auto e_node    = item["explain"];
         const auto lang_node = item["language"];
 
-        if (!q_node || !c_node || !a_node)
+        if (!q_node || !c_node || (!a_node && !default_answer))
         {
             throw std::runtime_error(
                 "Missing required keys (question, choices, answer)."
-                " Check each question in your .yaml file.");
+                " Check each question in your .yaml file or provide 'default-answer'.");
         }
         if (!c_node.IsSequence())
         {
@@ -55,7 +55,7 @@ static std::vector<Question> parse_question_sequence(const YAML::Node& seq)
         {
             q.choices.push_back(c.as<std::string>());
         }
-        q.answer = a_node.as<int>();
+        q.answer = a_node ? a_node.as<int>() : *default_answer;
         if (code_node) q.code = code_node.as<std::string>();
         if (e_node)    q.explain = e_node.as<std::string>();
         if (lang_node) q.language = lang_node.as<std::string>();
@@ -84,6 +84,10 @@ QuizFile load_quiz(const std::string& filename)
 
     if (root["name"])   quiz.name   = root["name"].as<std::string>();
     if (root["author"]) quiz.author = root["author"].as<std::string>();
+    if (root["default-answer"])
+    {
+        quiz.default_answer = root["default-answer"].as<int>();
+    }
 
     auto q_node = root["questions"];
     if (!q_node)
@@ -92,11 +96,11 @@ QuizFile load_quiz(const std::string& filename)
     if (!q_node.IsSequence())
         throw std::runtime_error("'questions' must be a sequence.");
 
-    quiz.questions = parse_question_sequence(q_node);
+    quiz.questions = parse_question_sequence(quiz.default_answer, q_node);
     return quiz;
 }
 
-static void emit_questions(YAML::Emitter& out, const std::vector<Question>& questions)
+static void emit_questions(YAML::Emitter& out, const std::optional<int>& default_answer, const std::vector<Question>& questions)
 {
     out << YAML::BeginSeq;
     for (const auto& q : questions)
@@ -121,7 +125,10 @@ static void emit_questions(YAML::Emitter& out, const std::vector<Question>& ques
             out << c;
         }
         out << YAML::EndSeq;
-        out << YAML::Key << "answer" << YAML::Value << q.answer;
+        if (!default_answer || *default_answer != q.answer)
+        {
+            out << YAML::Key << "answer" << YAML::Value << q.answer;
+        }
         out << YAML::EndMap;
     }
     out << YAML::EndSeq;
@@ -133,8 +140,12 @@ void save_quiz(const QuizFile& quiz, const std::string& filename)
     out << YAML::BeginMap;
     out << YAML::Key << "name"   << YAML::Value << quiz.name;
     out << YAML::Key << "author" << YAML::Value << quiz.author;
+    if (quiz.default_answer)
+    {
+        out << YAML::Key << "default-answer" << YAML::Value << *quiz.default_answer;
+    }
     out << YAML::Key << "questions" << YAML::Value;
-    emit_questions(out, quiz.questions);
+    emit_questions(out, quiz.default_answer, quiz.questions);
     out << YAML::EndMap;
 
     std::ofstream file_out(filename);
